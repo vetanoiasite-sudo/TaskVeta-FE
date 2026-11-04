@@ -1,0 +1,5 @@
+{
+  "/api": { "target": "http://localhost:5109", "secure": false, "changeOrigin": false, "xfwd": true },
+  "/hubs": { "target": "http://localhost:5109", "secure": false, "ws": true, "changeOrigin": false, "xfwd": true },
+  "/health": { "target": "http://localhost:5109", "secure": false }
+}

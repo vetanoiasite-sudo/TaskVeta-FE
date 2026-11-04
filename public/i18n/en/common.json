@@ -1,0 +1,80 @@
+{
+  "app": { "name": "HQ Workforce", "tagline": "Attendance & Task Management" },
+  "nav": {
+    "toggle": "Toggle navigation",
+    "overview": "Overview", "dashboard": "Dashboard", "notifications": "Notifications",
+    "attendance": "Attendance", "myAttendance": "My Attendance", "leave": "Leave Requests", "dailyAttendance": "Daily Attendance",
+    "attendanceHistory": "Attendance History", "absences": "Absence Reports", "analytics": "Attendance Analytics", "kiosk": "QR Kiosk",
+    "tasks": "Tasks", "myTasks": "My Tasks", "taskManagement": "Task Management", "kanban": "Kanban Board",
+    "administration": "Administration", "employees": "Employees", "departments": "Departments", "teams": "Teams",
+    "users": "Users & Roles", "settings": "System Settings", "audit": "Audit Log"
+  },
+  "common": {
+    "save": "Save", "cancel": "Cancel", "close": "Close", "confirm": "Confirm", "delete": "Delete", "edit": "Edit", "add": "Add",
+    "create": "Create", "update": "Update", "search": "Search", "filter": "Filter", "reset": "Reset", "apply": "Apply",
+    "export": "Export", "refresh": "Refresh", "view": "View", "details": "Details", "actions": "Actions", "yes": "Yes", "no": "No",
+    "all": "All", "none": "None", "active": "Active", "inactive": "Inactive", "status": "Status", "date": "Date", "from": "From",
+    "to": "To", "today": "Today", "name": "Name", "nameAr": "Name (Arabic)", "code": "Code", "description": "Description",
+    "department": "Department", "team": "Team", "employee": "Employee", "employeeCode": "Employee code", "notes": "Notes",
+    "reason": "Reason", "language": "Language", "loading": "Loading…", "noData": "No data found", "required": "Required",
+    "saved": "Saved successfully", "deleted": "Deleted successfully", "areYouSure": "Are you sure?",
+    "deleteConfirm": "This action cannot be undone. Delete \"{{name}}\"?", "back": "Back", "submit": "Submit",
+    "total": "Total", "createdAt": "Created", "updatedAt": "Updated", "by": "by", "minutes": "min", "hours": "h", "days": "days",
+    "dateRange": "Date range", "startDate": "Start date", "endDate": "End date", "optional": "Optional", "manager": "Manager",
+    "members": "Members", "period": "Period", "comparePeriod": "Compare with", "percent": "%", "open": "Open"
+  },
+  "auth": {
+    "welcome": "Welcome back", "signInPrompt": "Sign in with your company account", "email": "Email", "password": "Password",
+    "signIn": "Sign in", "logout": "Sign out", "changePassword": "Change password", "currentPassword": "Current password",
+    "newPassword": "New password", "passwordHint": "At least 8 characters with upper & lower case letters and a digit",
+    "passwordChanged": "Password changed. Please sign in again.",
+    "heroText": "One place to record attendance at headquarters, monitor teams and deliver work on time.",
+    "feature1": "Verified check-in with GPS, company network or QR code",
+    "feature2": "Assign, track and review tasks with full history",
+    "feature3": "Real-time dashboards, analytics and exportable reports"
+  },
+  "errors": {
+    "unexpected": "An unexpected error occurred.", "network": "Cannot reach the server. Check your connection.",
+    "forbidden": "You do not have permission to do that.", "notFound": "The requested item was not found.",
+    "tooMany": "Too many requests. Please wait a moment."
+  },
+  "dashboard": {
+    "title": "Dashboard", "greeting": "Hello, {{name}}", "subtitle": "Here is what is happening today",
+    "totalEmployees": "Total employees", "presentToday": "Present today", "absentToday": "Absent today", "lateToday": "Late today",
+    "onLeave": "On leave", "insideNow": "Inside the company", "attendanceRate": "Attendance rate", "wfh": "Working from home",
+    "trend": "Attendance trend (last 14 days)", "taskOverview": "Task overview", "myDay": "My day", "goToAttendance": "Open attendance",
+    "checkedInAt": "Checked in at {{time}}", "checkedOutAt": "Checked out at {{time}}", "notCheckedIn": "You have not checked in yet",
+    "totalTasks": "Total tasks", "newTasks": "New", "inProgress": "In progress", "pendingReview": "Pending review",
+    "completed": "Completed", "overdue": "Overdue", "dueThisWeek": "Due this week", "byPriority": "Open tasks by priority",
+    "present": "Present", "absent": "Absent", "late": "Late", "holiday": "Holiday: {{name}}", "weekend": "Not a working day",
+    "schedule": "Schedule {{start}} – {{end}}", "viewTasks": "View tasks"
+  },
+  "notifications": {
+    "title": "Notifications", "subtitle": "Updates about your tasks and attendance", "markAllRead": "Mark all as read",
+    "markRead": "Mark as read", "empty": "You're all caught up", "viewAll": "View all notifications", "unreadOnly": "Unread only",
+    "type": "Type"
+  },
+  "enums": {
+    "status": {
+      "Present": "Present", "Absent": "Absent", "Late": "Late", "HalfDay": "Half day", "EarlyLeave": "Early leave",
+      "OnLeave": "On leave", "Holiday": "Holiday", "WorkFromHome": "Work from home",
+      "Inside": "Inside", "CheckedOut": "Checked out", "MissingCheckOut": "Missing check-out", "Weekend": "Weekend",
+      "Upcoming": "Upcoming", "NotArrived": "Not arrived", "NotCheckedIn": "Not checked in", "PendingLeave": "Pending leave",
+      "New": "New", "Assigned": "Assigned", "InProgress": "In progress", "PendingReview": "Pending review", "Completed": "Completed",
+      "Rejected": "Rejected", "Cancelled": "Cancelled",
+      "Low": "Low", "Medium": "Medium", "High": "High", "Urgent": "Urgent",
+      "Pending": "Pending", "Approved": "Approved",
+      "true": "Active", "false": "Inactive"
+    },
+    "role": { "SuperAdmin": "Super Admin", "Admin": "Admin / HR", "Manager": "Manager", "Employee": "Employee" },
+    "leaveType": { "Annual": "Annual", "Sick": "Sick", "Unpaid": "Unpaid", "Emergency": "Emergency", "Other": "Other" },
+    "day": { "Sunday": "Sunday", "Monday": "Monday", "Tuesday": "Tuesday", "Wednesday": "Wednesday", "Thursday": "Thursday", "Friday": "Friday", "Saturday": "Saturday" },
+    "notificationType": {
+      "TaskAssigned": "Task assigned", "TaskDeadlineApproaching": "Deadline approaching", "TaskOverdue": "Task overdue",
+      "TaskApproved": "Task approved", "TaskRejected": "Task rejected", "TaskComment": "Comment", "TaskStatusChanged": "Status changed",
+      "AttendanceUpdated": "Attendance updated", "AttendanceAttention": "Attendance attention", "LeaveRequest": "Leave request", "System": "System"
+    },
+    "verification": { "None": "None", "Geofence": "GPS", "Network": "Company network", "QrCode": "QR code" },
+    "source": { "Web": "Web", "QrCode": "QR code", "Manual": "Manual (HR)", "System": "System" }
+  }
+}

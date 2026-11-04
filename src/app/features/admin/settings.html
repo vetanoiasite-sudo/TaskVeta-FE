@@ -1,0 +1,293 @@
+<app-page-header [title]="'admin.settings.title' | t" [subtitle]="'admin.settings.subtitle' | t" icon="settings">
+  @if (lastUpdated()) { <span class="muted small">{{ 'admin.settings.lastUpdated' | t }}: {{ lastUpdated() | ldate: 'datetime' }}</span> }
+</app-page-header>
+<app-loading-bar [loading]="loading()" />
+
+<mat-tab-group animationDuration="150ms" class="settings-tabs">
+  @if (canSettings()) {
+    <!-- ============================== General ============================== -->
+    <mat-tab>
+      <ng-template mat-tab-label><mat-icon>tune</mat-icon>{{ 'admin.settings.general' | t }}</ng-template>
+      <form class="tab-body" [formGroup]="form" (ngSubmit)="saveSettings()">
+        <div class="card">
+          <h3 class="card__title">{{ 'admin.settings.company' | t }}</h3>
+          <div class="form-grid">
+            <mat-form-field>
+              <mat-label>{{ 'admin.settings.companyName' | t }}</mat-label>
+              <input matInput formControlName="companyName" maxlength="150" />
+              @if (err('companyName')) { <mat-error>{{ err('companyName') }}</mat-error> }
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>{{ 'admin.settings.timeZone' | t }}</mat-label>
+              <input matInput [matAutocomplete]="tzAuto" [ngModel]="tzFilter()" (ngModelChange)="tzFilter.set($event)"
+                     [ngModelOptions]="{ standalone: true }" />
+              <mat-autocomplete #tzAuto="matAutocomplete" (optionSelected)="pickTimeZone($event.option.value)">
+                @for (z of filteredZones(); track z.id) { <mat-option [value]="z.id">{{ z.displayName }}</mat-option> }
+              </mat-autocomplete>
+              <mat-hint>{{ tzLabel(form.controls.timeZoneId.value) }}</mat-hint>
+              @if (err('timeZoneId')) { <mat-error>{{ err('timeZoneId') }}</mat-error> }
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="card__title">{{ 'admin.settings.attendanceRules' | t }}</h3>
+          <div class="form-grid">
+            <div class="toggle-row span-2">
+              <mat-slide-toggle formControlName="allowMultipleShifts">{{ 'admin.settings.allowMultipleShifts' | t }}</mat-slide-toggle>
+              <p class="muted">{{ 'admin.settings.allowMultipleShiftsHint' | t }}</p>
+            </div>
+            @if (form.controls.allowMultipleShifts.value) {
+              <mat-form-field>
+                <mat-label>{{ 'admin.settings.maxShifts' | t }}</mat-label>
+                <input matInput type="number" min="1" max="5" formControlName="maxShiftsPerDay" />
+              </mat-form-field>
+            }
+            <mat-form-field>
+              <mat-label>{{ 'admin.settings.finalizeDelay' | t }}</mat-label>
+              <input matInput type="number" min="0" max="1440" formControlName="attendanceFinalizeDelayMinutes" />
+              <span matTextSuffix>{{ 'common.minutes' | t }}</span>
+              <mat-hint>{{ 'admin.settings.finalizeDelayHint' | t }}</mat-hint>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>{{ 'admin.settings.reminderHours' | t }}</mat-label>
+              <input matInput type="number" min="1" max="336" formControlName="taskDeadlineReminderHours" />
+              <span matTextSuffix>{{ 'common.hours' | t }}</span>
+              <mat-hint>{{ 'admin.settings.reminderHoursHint' | t }}</mat-hint>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="save-bar">
+          <button mat-flat-button type="submit" [disabled]="saving() || form.pristine"><mat-icon>save</mat-icon>{{ 'common.save' | t }}</button>
+        </div>
+      </form>
+    </mat-tab>
+
+    <!-- ============================== On-site verification ============================== -->
+    <mat-tab>
+      <ng-template mat-tab-label><mat-icon>verified_user</mat-icon>{{ 'admin.settings.verification' | t }}</ng-template>
+      <form class="tab-body" [formGroup]="form" (ngSubmit)="saveSettings()">
+        <div class="alert" [class.alert-warning]="enabledCount() === 0" [class.alert-success]="enabledCount() > 0">
+          <mat-icon>{{ enabledCount() === 0 ? 'gpp_maybe' : 'gpp_good' }}</mat-icon>
+          {{ (enabledCount() === 0 ? 'admin.settings.noVerification' : 'admin.settings.verificationOn') | t: { count: enabledCount() } }}
+        </div>
+
+        <div class="card">
+          <h3 class="card__title">{{ 'admin.settings.policy' | t }}</h3>
+          <mat-button-toggle-group formControlName="verificationPolicy" class="policy">
+            <mat-button-toggle value="Any">{{ 'admin.settings.policyAny' | t }}</mat-button-toggle>
+            <mat-button-toggle value="All">{{ 'admin.settings.policyAll' | t }}</mat-button-toggle>
+          </mat-button-toggle-group>
+          <p class="muted">{{ (form.controls.verificationPolicy.value === 'All' ? 'admin.settings.policyAllHint' : 'admin.settings.policyAnyHint') | t }}</p>
+          <mat-slide-toggle formControlName="requireVerificationOnCheckOut">{{ 'admin.settings.verifyCheckOut' | t }}</mat-slide-toggle>
+          <p class="muted">{{ 'admin.settings.remoteHint' | t }}</p>
+        </div>
+
+        <div class="grid grid-3 methods">
+          <!-- Geofence -->
+          <div class="card method" [class.on]="form.controls.geofenceEnabled.value">
+            <div class="method__head">
+              <div class="method__icon"><mat-icon>location_on</mat-icon></div>
+              <div><strong>{{ 'admin.settings.geofence' | t }}</strong><span class="muted">{{ 'admin.settings.geofenceHint' | t }}</span></div>
+              <mat-slide-toggle formControlName="geofenceEnabled" />
+            </div>
+            @if (form.controls.geofenceEnabled.value) {
+              <div class="form-grid">
+                <mat-form-field>
+                  <mat-label>{{ 'admin.settings.latitude' | t }}</mat-label>
+                  <input matInput type="number" step="0.000001" formControlName="officeLatitude" />
+                  @if (err('officeLatitude')) { <mat-error>{{ err('officeLatitude') }}</mat-error> }
+                  @else if (form.controls.officeLatitude.invalid) { <mat-error>−90 … 90</mat-error> }
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>{{ 'admin.settings.longitude' | t }}</mat-label>
+                  <input matInput type="number" step="0.000001" formControlName="officeLongitude" />
+                  @if (err('officeLongitude')) { <mat-error>{{ err('officeLongitude') }}</mat-error> }
+                  @else if (form.controls.officeLongitude.invalid) { <mat-error>−180 … 180</mat-error> }
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>{{ 'admin.settings.radius' | t }}</mat-label>
+                  <input matInput type="number" min="10" max="10000" formControlName="geofenceRadiusMeters" />
+                  <span matTextSuffix>m</span>
+                  @if (form.controls.geofenceRadiusMeters.invalid) { <mat-error>10 … 10000</mat-error> }
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>{{ 'admin.settings.maxAccuracy' | t }}</mat-label>
+                  <input matInput type="number" min="5" max="5000" formControlName="maxLocationAccuracyMeters" />
+                  <span matTextSuffix>m</span>
+                  @if (form.controls.maxLocationAccuracyMeters.invalid) { <mat-error>5 … 5000</mat-error> }
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <button mat-stroked-button type="button" (click)="useMyLocation()" [disabled]="locating()">
+                  <mat-icon>my_location</mat-icon>{{ (locating() ? 'admin.settings.locating' : 'admin.settings.useMyLocation') | t }}
+                </button>
+                @if (mapUrl(); as url) {
+                  <a mat-button [href]="url" target="_blank" rel="noopener"><mat-icon>map</mat-icon>{{ 'admin.settings.openMap' | t }}</a>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- Network -->
+          <div class="card method" [class.on]="form.controls.networkCheckEnabled.value">
+            <div class="method__head">
+              <div class="method__icon"><mat-icon>lan</mat-icon></div>
+              <div><strong>{{ 'admin.settings.network' | t }}</strong><span class="muted">{{ 'admin.settings.networkHint' | t }}</span></div>
+              <mat-slide-toggle formControlName="networkCheckEnabled" />
+            </div>
+            @if (form.controls.networkCheckEnabled.value) {
+              <mat-form-field class="w-100">
+                <mat-label>{{ 'admin.settings.ipRanges' | t }}</mat-label>
+                <textarea matInput rows="5" formControlName="allowedIpRanges" class="mono" placeholder="10.0.0.0/8&#10;192.168.1.0/24&#10;203.0.113.10"></textarea>
+                <mat-hint>{{ 'admin.settings.ipRangesHint' | t }}</mat-hint>
+                @if (err('allowedIpRanges')) { <mat-error>{{ err('allowedIpRanges') }}</mat-error> }
+                @else if (form.controls.allowedIpRanges.invalid) { <mat-error>{{ 'common.required' | t }}</mat-error> }
+              </mat-form-field>
+              <div class="row">
+                <button mat-stroked-button type="button" (click)="detectIp()"><mat-icon>wifi_find</mat-icon>{{ 'admin.settings.detectIp' | t }}</button>
+              </div>
+              <p class="muted small">{{ 'admin.settings.proxyHint' | t }}</p>
+            }
+          </div>
+
+          <!-- QR -->
+          <div class="card method" [class.on]="form.controls.qrCodeEnabled.value">
+            <div class="method__head">
+              <div class="method__icon"><mat-icon>qr_code_2</mat-icon></div>
+              <div><strong>{{ 'admin.settings.qr' | t }}</strong><span class="muted">{{ 'admin.settings.qrHint' | t }}</span></div>
+              <mat-slide-toggle formControlName="qrCodeEnabled" />
+            </div>
+            @if (form.controls.qrCodeEnabled.value) {
+              <mat-form-field class="w-100">
+                <mat-label>{{ 'admin.settings.qrRotation' | t }}</mat-label>
+                <input matInput type="number" min="10" max="600" formControlName="qrRotationSeconds" />
+                <span matTextSuffix>s</span>
+                @if (form.controls.qrRotationSeconds.invalid) { <mat-error>10 … 600</mat-error> }
+              </mat-form-field>
+              <div class="row">
+                <a mat-stroked-button routerLink="/kiosk" target="_blank"><mat-icon>open_in_new</mat-icon>{{ 'admin.settings.openKiosk' | t }}</a>
+                <button mat-button type="button" class="danger" (click)="regenerateQr()"><mat-icon>autorenew</mat-icon>{{ 'admin.settings.regenerateQr' | t }}</button>
+              </div>
+              <p class="muted small">{{ 'admin.settings.qrSaveFirst' | t }}</p>
+            }
+          </div>
+        </div>
+
+        <div class="save-bar">
+          <button mat-flat-button type="submit" [disabled]="saving() || form.pristine"><mat-icon>save</mat-icon>{{ 'common.save' | t }}</button>
+        </div>
+      </form>
+    </mat-tab>
+
+    <!-- ============================== Work schedules ============================== -->
+    <mat-tab>
+      <ng-template mat-tab-label><mat-icon>schedule</mat-icon>{{ 'admin.settings.schedules' | t }}</ng-template>
+      <div class="tab-body">
+        <div class="row head-row">
+          <p class="muted">{{ 'admin.settings.schedulesHint' | t }}</p>
+          <span class="spacer"></span>
+          <button mat-flat-button (click)="editSchedule()"><mat-icon>add</mat-icon>{{ 'admin.settings.addSchedule' | t }}</button>
+        </div>
+        <div class="table-card">
+          <div class="table-scroll">
+            <table mat-table [dataSource]="schedules()">
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>{{ 'common.name' | t }}</th>
+                <td mat-cell *matCellDef="let s">
+                  <span class="cell-strong">{{ s.name }}</span>
+                  @if (s.isDefault) { <span class="chip tone-primary default-chip">{{ 'admin.settings.default' | t }}</span> }
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="hours">
+                <th mat-header-cell *matHeaderCellDef>{{ 'admin.settings.workingHours' | t }}</th>
+                <td mat-cell *matCellDef="let s"><span dir="ltr">{{ short(s.startTime) }} – {{ short(s.endTime) }}</span></td>
+              </ng-container>
+              <ng-container matColumnDef="grace">
+                <th mat-header-cell *matHeaderCellDef>{{ 'admin.settings.grace' | t }}</th>
+                <td mat-cell *matCellDef="let s">
+                  {{ 'admin.settings.lateShort' | t }} {{ s.lateGraceMinutes }} · {{ 'admin.settings.earlyShort' | t }} {{ s.earlyLeaveGraceMinutes }} {{ 'common.minutes' | t }}
+                  <span class="cell-sub">{{ 'admin.settings.halfDayShort' | t: { h: s.halfDayThresholdHours } }}</span>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="weekend">
+                <th mat-header-cell *matHeaderCellDef>{{ 'admin.settings.weekendDays' | t }}</th>
+                <td mat-cell *matCellDef="let s">{{ weekendText(s) }}</td>
+              </ng-container>
+              <ng-container matColumnDef="employees">
+                <th mat-header-cell *matHeaderCellDef>{{ 'nav.employees' | t }}</th>
+                <td mat-cell *matCellDef="let s">{{ s.employeeCount }}</td>
+              </ng-container>
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let s" class="actions-cell">
+                  <button mat-icon-button [matTooltip]="'common.edit' | t" (click)="editSchedule(s)"><mat-icon>edit</mat-icon></button>
+                  @if (!s.isDefault) {
+                    <button mat-icon-button [matTooltip]="'common.delete' | t" (click)="deleteSchedule(s)"><mat-icon>delete_outline</mat-icon></button>
+                  }
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="scheduleColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: scheduleColumns"></tr>
+            </table>
+          </div>
+          @if (schedules().length === 0) { <app-empty-state icon="schedule" [message]="'common.noData' | t" /> }
+        </div>
+      </div>
+    </mat-tab>
+  }
+
+  @if (canHolidays()) {
+    <!-- ============================== Holidays ============================== -->
+    <mat-tab>
+      <ng-template mat-tab-label><mat-icon>event</mat-icon>{{ 'admin.settings.holidays' | t }}</ng-template>
+      <div class="tab-body">
+        <div class="row head-row">
+          <mat-form-field class="year">
+            <mat-label>{{ 'admin.settings.year' | t }}</mat-label>
+            <mat-select [ngModel]="year()" (ngModelChange)="year.set($event); loadHolidays()">
+              @for (y of years; track y) { <mat-option [value]="y">{{ y }}</mat-option> }
+            </mat-select>
+          </mat-form-field>
+          <p class="muted">{{ 'admin.settings.holidaysHint' | t }}</p>
+          <span class="spacer"></span>
+          <button mat-flat-button (click)="editHoliday()"><mat-icon>add</mat-icon>{{ 'admin.settings.addHoliday' | t }}</button>
+        </div>
+        <div class="table-card">
+          <div class="table-scroll">
+            <table mat-table [dataSource]="holidays()">
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>{{ 'common.name' | t }}</th>
+                <td mat-cell *matCellDef="let h" class="cell-strong">{{ holidayName(h) }}</td>
+              </ng-container>
+              <ng-container matColumnDef="dates">
+                <th mat-header-cell *matHeaderCellDef>{{ 'common.date' | t }}</th>
+                <td mat-cell *matCellDef="let h">
+                  {{ h.startDate | ldate }}@if (h.endDate !== h.startDate) { – {{ h.endDate | ldate }} }
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="days">
+                <th mat-header-cell *matHeaderCellDef>{{ 'common.days' | t }}</th>
+                <td mat-cell *matCellDef="let h">{{ holidayDays(h) }}</td>
+              </ng-container>
+              <ng-container matColumnDef="description">
+                <th mat-header-cell *matHeaderCellDef>{{ 'common.description' | t }}</th>
+                <td mat-cell *matCellDef="let h">{{ h.description || '—' }}</td>
+              </ng-container>
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let h" class="actions-cell">
+                  <button mat-icon-button [matTooltip]="'common.edit' | t" (click)="editHoliday(h)"><mat-icon>edit</mat-icon></button>
+                  <button mat-icon-button [matTooltip]="'common.delete' | t" (click)="deleteHoliday(h)"><mat-icon>delete_outline</mat-icon></button>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="holidayColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: holidayColumns"></tr>
+            </table>
+          </div>
+          @if (holidays().length === 0) { <app-empty-state icon="event_busy" [message]="'admin.settings.noHolidays' | t" /> }
+        </div>
+      </div>
+    </mat-tab>
+  }
+</mat-tab-group>

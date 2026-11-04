@@ -1,0 +1,59 @@
+{
+  "tasks": {
+    "newTask": "New task",
+    "overdue": "Overdue",
+    "quickProgress": "Update progress",
+    "empty": "No tasks yet",
+    "emptyFiltered": "No tasks match the current filters",
+    "list": { "title": "Task Management", "subtitle": "Assign, track and review work across your teams" },
+    "my": { "title": "My Tasks", "subtitle": "Tasks assigned to you and their deadlines", "dueSoon": "Upcoming deadlines" },
+    "views": { "table": "Table view", "board": "Kanban view" },
+    "stats": { "assigned": "+{{count}} assigned", "dueThisWeek": "{{count}} due this week" },
+    "filters": { "mineOnly": "Only my tasks", "dueRange": "Due between", "overdueOnly": "Overdue only", "createdByMe": "Created by me" },
+    "fields": {
+      "title": "Title", "description": "Description", "priority": "Priority", "startDate": "Start date", "startTime": "Start time",
+      "dueDate": "Due date", "dueTime": "Due time", "assignees": "Assignees", "assignee": "Assignee", "assignedBy": "Assigned by",
+      "progress": "Progress", "completionDate": "Completed on"
+    },
+    "form": {
+      "createTitle": "Create task", "editTitle": "Edit task", "autoDepartment": "Automatic (from first assignee)",
+      "dueBeforeStart": "The due date must be after the start date.",
+      "assigneesHint": "Select one or more employees. The first one is the primary assignee."
+    },
+    "board": {
+      "title": "Kanban Board", "subtitle": "Drag cards between columns to update their status",
+      "showCancelled": "Show cancelled", "empty": "Drop tasks here", "truncated": "Showing the first 200 of {{count}} tasks. Use filters to narrow down."
+    },
+    "actions": {
+      "start": "Start work", "resume": "Back to in progress", "reopen": "Reopen", "submit": "Submit for review", "approve": "Approve",
+      "reject": "Reject", "cancel": "Cancel task", "restore": "Restore", "markAssigned": "Mark as assigned"
+    },
+    "details": {
+      "notFound": "This task does not exist or you do not have access to it.",
+      "nextSteps": "Next steps:", "rejectionReason": "Rejection reason", "reviewFeedback": "Reviewer feedback",
+      "noDescription": "No description provided.", "saveProgress": "Save progress", "primary": "Primary", "unassigned": "Not assigned yet",
+      "rejectPrompt": "Explain why \"{{title}}\" is being rejected. The assignees will see this reason.",
+      "cancelPrompt": "Cancel this task? Assignees will be notified.",
+      "approvePrompt": "Approve the work and mark this task as completed?",
+      "feedbackOptional": "Feedback (optional)", "deleteTitle": "Delete task"
+    },
+    "tabs": { "comments": "Comments", "attachments": "Attachments", "history": "History" },
+    "comments": { "empty": "No comments yet. Start the conversation.", "add": "Write a comment", "hint": "Ctrl + Enter to send" },
+    "attachments": {
+      "upload": "Upload file", "uploading": "Uploading…", "uploaded": "File uploaded", "download": "Download",
+      "rules": "PDF, Office, text, CSV, images or ZIP · max 10 MB", "empty": "No attachments",
+      "typeNotAllowed": "File type {{ext}} is not allowed.", "tooLarge": "Files must be between 1 byte and 10 MB.",
+      "deleteTitle": "Delete attachment"
+    },
+    "history": {
+      "actions": {
+        "Created": "Task created", "Updated": "Details updated", "StatusChanged": "Status changed", "ProgressUpdated": "Progress updated",
+        "Commented": "Comment added", "AttachmentAdded": "Attachment added", "AttachmentRemoved": "Attachment removed", "Overdue": "Became overdue"
+      }
+    },
+    "messages": {
+      "created": "Task created and assignees notified", "updated": "Task updated", "progressUpdated": "Progress set to {{value}}%",
+      "statusChanged": "Status changed to {{status}}"
+    }
+  }
+}

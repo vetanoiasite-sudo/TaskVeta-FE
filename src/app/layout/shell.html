@@ -1,0 +1,91 @@
+<mat-sidenav-container class="shell" autosize>
+  <mat-sidenav
+    class="sidebar"
+    [class.collapsed]="collapsed() && !isHandset()"
+    [mode]="isHandset() ? 'over' : 'side'"
+    [opened]="isHandset() ? mobileOpen() : true"
+    (closedStart)="mobileOpen.set(false)">
+    <div class="brand">
+      <div class="brand__logo"><mat-icon>apartment</mat-icon></div>
+      @if (!collapsed() || isHandset()) {
+        <div class="brand__text">
+          <strong>{{ 'app.name' | t }}</strong>
+          <span>{{ 'app.tagline' | t }}</span>
+        </div>
+      }
+    </div>
+
+    <nav class="nav">
+      @for (group of nav(); track group.label) {
+        @if (!collapsed() || isHandset()) { <div class="nav__group">{{ group.label | t }}</div> } @else { <div class="nav__sep"></div> }
+        @for (item of group.items; track item.link) {
+          <a class="nav__item" [routerLink]="item.link" routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: !!item.exact }"
+             [matTooltip]="collapsed() && !isHandset() ? (item.label | t) : ''" matTooltipPosition="after">
+            <mat-icon>{{ item.icon }}</mat-icon>
+            @if (!collapsed() || isHandset()) { <span>{{ item.label | t }}</span> }
+            @if (item.link === '/notifications' && hub.unread() > 0 && (!collapsed() || isHandset())) {
+              <span class="nav__badge">{{ hub.unread() }}</span>
+            }
+          </a>
+        }
+      }
+    </nav>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="content">
+    <mat-toolbar class="topbar">
+      <button mat-icon-button (click)="toggleNav()" [attr.aria-label]="'nav.toggle' | t"><mat-icon>menu</mat-icon></button>
+      <span class="topbar__spacer"></span>
+
+      <button mat-button class="lang-btn" (click)="toggleLanguage()" [matTooltip]="'common.language' | t">
+        <mat-icon>translate</mat-icon> {{ i18n.lang() === 'ar' ? 'English' : 'العربية' }}
+      </button>
+
+      <button mat-icon-button [matMenuTriggerFor]="notifMenu" (menuOpened)="loadRecent()" [attr.aria-label]="'nav.notifications' | t">
+        <mat-icon [matBadge]="hub.unread() || null" matBadgeColor="warn" matBadgeSize="small" aria-hidden="false">notifications</mat-icon>
+      </button>
+      <mat-menu #notifMenu="matMenu" class="notif-menu" xPosition="before">
+        <div class="notif-menu__head" (click)="$event.stopPropagation()">
+          <strong>{{ 'nav.notifications' | t }}</strong>
+          @if (hub.unread() > 0) { <button mat-button (click)="markAllRead()">{{ 'notifications.markAllRead' | t }}</button> }
+        </div>
+        @for (n of recent(); track n.id) {
+          <button mat-menu-item class="notif-item" [class.unread]="!n.isRead" (click)="openNotification(n)">
+            <div class="notif-item__title">{{ hub.title(n) }}</div>
+            <div class="notif-item__msg">{{ hub.message(n) }}</div>
+            <div class="notif-item__time">{{ n.createdAt | ldate: 'relative' }}</div>
+          </button>
+        } @empty {
+          <div class="notif-menu__empty">{{ 'notifications.empty' | t }}</div>
+        }
+        <mat-divider />
+        <a mat-menu-item routerLink="/notifications"><mat-icon>list</mat-icon>{{ 'notifications.viewAll' | t }}</a>
+      </mat-menu>
+
+      <button mat-button class="user-btn" [matMenuTriggerFor]="userMenu">
+        <app-avatar [name]="auth.user()?.fullName" [size]="30" />
+        @if (!isHandset()) {
+          <span class="user-btn__text">
+            <span class="user-btn__name">{{ auth.user()?.fullName }}</span>
+            <span class="user-btn__role">{{ roleLabel() }}</span>
+          </span>
+        }
+        <mat-icon>expand_more</mat-icon>
+      </button>
+      <mat-menu #userMenu="matMenu" xPosition="before">
+        <div class="user-menu__head">
+          <strong>{{ auth.user()?.fullName }}</strong>
+          <span>{{ auth.user()?.email }}</span>
+        </div>
+        <mat-divider />
+        <button mat-menu-item (click)="changePassword()"><mat-icon>lock_reset</mat-icon>{{ 'auth.changePassword' | t }}</button>
+        <button mat-menu-item (click)="logout()"><mat-icon>logout</mat-icon>{{ 'auth.logout' | t }}</button>
+      </mat-menu>
+    </mat-toolbar>
+
+    <main class="page">
+      <router-outlet />
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

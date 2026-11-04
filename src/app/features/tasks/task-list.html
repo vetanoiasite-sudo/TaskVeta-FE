@@ -1,0 +1,188 @@
+<app-page-header
+  [title]="(isMy ? 'tasks.my.title' : 'tasks.list.title') | t"
+  [subtitle]="(isMy ? 'tasks.my.subtitle' : 'tasks.list.subtitle') | t"
+  [icon]="isMy ? 'assignment_ind' : 'assignment'">
+  <mat-button-toggle-group [value]="view()" (change)="setView($event.value)" hideSingleSelectionIndicator>
+    <mat-button-toggle value="table" [matTooltip]="'tasks.views.table' | t"><mat-icon>table_rows</mat-icon></mat-button-toggle>
+    <mat-button-toggle value="board" [matTooltip]="'tasks.views.board' | t"><mat-icon>view_kanban</mat-icon></mat-button-toggle>
+  </mat-button-toggle-group>
+  @if (!isMy && canExport) { <app-export-menu (export)="export($event)" /> }
+  @if (canAssign) {
+    <button mat-flat-button (click)="create()"><mat-icon>add</mat-icon>{{ 'tasks.newTask' | t }}</button>
+  }
+</app-page-header>
+
+@if (stats(); as s) {
+  <div class="stats">
+    <app-stat-card [label]="'dashboard.totalTasks' | t" [value]="s.total" icon="assignment" tone="primary"
+                   [clickable]="true" (pressed)="applyStat('all')" [class.active-stat]="activeStat() === 'all'" />
+    <app-stat-card [label]="'dashboard.newTasks' | t" [value]="s.new" icon="fiber_new" tone="neutral"
+                   [clickable]="true" (pressed)="applyStat('new')" [class.active-stat]="activeStat() === 'new'"
+                   [hint]="s.assigned ? ('tasks.stats.assigned' | t: { count: s.assigned }) : null" />
+    <app-stat-card [label]="'dashboard.inProgress' | t" [value]="s.inProgress" icon="autorenew" tone="info"
+                   [clickable]="true" (pressed)="applyStat('inProgress')" [class.active-stat]="activeStat() === 'inProgress'" />
+    <app-stat-card [label]="'dashboard.pendingReview' | t" [value]="s.pendingReview" icon="rate_review" tone="purple"
+                   [clickable]="true" (pressed)="applyStat('pendingReview')" [class.active-stat]="activeStat() === 'pendingReview'" />
+    <app-stat-card [label]="'dashboard.completed' | t" [value]="s.completed" icon="task_alt" tone="success"
+                   [clickable]="true" (pressed)="applyStat('completed')" [class.active-stat]="activeStat() === 'completed'" />
+    <app-stat-card [label]="'dashboard.overdue' | t" [value]="s.overdue" icon="running_with_errors" tone="danger"
+                   [clickable]="true" (pressed)="applyStat('overdue')" [class.active-stat]="activeStat() === 'overdue'"
+                   [hint]="'tasks.stats.dueThisWeek' | t: { count: s.dueThisWeek }" />
+  </div>
+}
+
+@if (isMy && dueSoon().length) {
+  <div class="card due-soon">
+    <h3 class="card__title">{{ 'tasks.my.dueSoon' | t }} <mat-icon>alarm</mat-icon></h3>
+    <div class="due-soon__list">
+      @for (t of dueSoon(); track t.id) {
+        <a class="due-item" [routerLink]="['/tasks', t.id]" [class.overdue]="t.isOverdue">
+          <div class="due-item__date">
+            <mat-icon>{{ t.isOverdue ? 'error' : 'event' }}</mat-icon>
+            <span>{{ t.dueDate | ldate: 'relative' }}</span>
+          </div>
+          <strong>{{ t.title }}</strong>
+          <div class="row">
+            <app-status-chip [value]="t.status" />
+            <div class="progress-mini"><div class="bar"><div class="fill" [style.width.%]="t.progressPercent"></div></div><span>{{ t.progressPercent }}%</span></div>
+          </div>
+        </a>
+      }
+    </div>
+  </div>
+}
+
+<div class="filters">
+  <mat-form-field class="wide">
+    <mat-label>{{ 'common.search' | t }}</mat-label>
+    <mat-icon matPrefix>search</mat-icon>
+    <input matInput [ngModel]="search()" (ngModelChange)="onSearch($event)" />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{ 'common.status' | t }}</mat-label>
+    <mat-select [ngModel]="status()" (ngModelChange)="status.set($event); activeStat.set('all'); reload()">
+      <mat-option [value]="null">{{ 'common.all' | t }}</mat-option>
+      @for (s of statuses; track s) { <mat-option [value]="s">{{ 'enums.status.' + s | t }}</mat-option> }
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{ 'tasks.fields.priority' | t }}</mat-label>
+    <mat-select [ngModel]="priority()" (ngModelChange)="priority.set($event); reload()">
+      <mat-option [value]="null">{{ 'common.all' | t }}</mat-option>
+      @for (p of priorities; track p) { <mat-option [value]="p">{{ 'enums.status.' + p | t }}</mat-option> }
+    </mat-select>
+  </mat-form-field>
+  @if (!isMy) {
+    <mat-form-field>
+      <mat-label>{{ 'tasks.fields.assignee' | t }}</mat-label>
+      <mat-select [ngModel]="assigneeId()" (ngModelChange)="assigneeId.set($event); reload()">
+        <mat-option [value]="null">{{ 'common.all' | t }}</mat-option>
+        @for (e of employees(); track e.id) { <mat-option [value]="e.id">{{ e.name }}</mat-option> }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{ 'common.department' | t }}</mat-label>
+      <mat-select [ngModel]="departmentId()" (ngModelChange)="departmentId.set($event); reload()">
+        <mat-option [value]="null">{{ 'common.all' | t }}</mat-option>
+        @for (d of departments(); track d.id) { <mat-option [value]="d.id">{{ d.name }}</mat-option> }
+      </mat-select>
+    </mat-form-field>
+  }
+  <mat-form-field class="wide">
+    <mat-label>{{ 'tasks.filters.dueRange' | t }}</mat-label>
+    <mat-date-range-input [rangePicker]="rp">
+      <input matStartDate [ngModel]="dueFrom()" (ngModelChange)="dueFrom.set($event)" [placeholder]="'common.from' | t" />
+      <input matEndDate [ngModel]="dueTo()" (ngModelChange)="dueTo.set($event); reload()" [placeholder]="'common.to' | t" />
+    </mat-date-range-input>
+    <mat-datepicker-toggle matIconSuffix [for]="rp" />
+    <mat-date-range-picker #rp />
+  </mat-form-field>
+  <mat-slide-toggle [ngModel]="overdue()" (ngModelChange)="overdue.set($event); activeStat.set($event ? 'overdue' : 'all'); reload()">
+    {{ 'tasks.filters.overdueOnly' | t }}
+  </mat-slide-toggle>
+  @if (!isMy && canAssign) {
+    <mat-slide-toggle [ngModel]="createdByMe()" (ngModelChange)="createdByMe.set($event); reload()">{{ 'tasks.filters.createdByMe' | t }}</mat-slide-toggle>
+  }
+  @if (hasFilters()) {
+    <button mat-button (click)="resetFilters()"><mat-icon>filter_alt_off</mat-icon>{{ 'common.reset' | t }}</button>
+  }
+</div>
+
+@if (view() === 'board') {
+  <app-task-board [embedded]="true" [query]="query()" [includeCancelled]="status() === 'Cancelled'" />
+} @else {
+  <div class="table-card">
+    <app-loading-bar [loading]="loading()" />
+    <div class="table-scroll">
+      <table mat-table [dataSource]="items()" matSort [matSortActive]="sort().active" [matSortDirection]="sort().direction"
+             matSortDisableClear (matSortChange)="onSort($event)">
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'tasks.fields.title' | t }}</th>
+          <td mat-cell *matCellDef="let t">
+            <span class="cell-strong title-cell">{{ t.title }}</span>
+            <span class="cell-sub">
+              @if (t.departmentName) { {{ t.departmentName }} · }
+              {{ 'tasks.fields.assignedBy' | t }}: {{ t.assignedByName }}
+              @if (t.commentCount) { · <mat-icon class="inline">chat_bubble_outline</mat-icon>{{ t.commentCount }} }
+              @if (t.attachmentCount) { · <mat-icon class="inline">attach_file</mat-icon>{{ t.attachmentCount }} }
+            </span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="priority">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'tasks.fields.priority' | t }}</th>
+          <td mat-cell *matCellDef="let t"><app-status-chip [value]="t.priority" /></td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'common.status' | t }}</th>
+          <td mat-cell *matCellDef="let t"><app-status-chip [value]="t.status" /></td>
+        </ng-container>
+        <ng-container matColumnDef="assignees">
+          <th mat-header-cell *matHeaderCellDef>{{ 'tasks.fields.assignees' | t }}</th>
+          <td mat-cell *matCellDef="let t"><app-assignee-stack [assignees]="t.assignees" /></td>
+        </ng-container>
+        <ng-container matColumnDef="progressPercent">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'tasks.fields.progress' | t }}</th>
+          <td mat-cell *matCellDef="let t">
+            <div class="progress-mini"><div class="bar"><div class="fill" [style.width.%]="t.progressPercent"
+                 [class.done]="t.status === 'Completed'"></div></div><span>{{ t.progressPercent }}%</span></div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="dueDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'tasks.fields.dueDate' | t }}</th>
+          <td mat-cell *matCellDef="let t" [class.overdue-cell]="t.isOverdue">
+            @if (t.dueDate) {
+              {{ t.dueDate | ldate: 'datetime' }}
+              @if (t.isOverdue) { <span class="cell-sub overdue-text">{{ 'tasks.overdue' | t }} · {{ t.dueDate | ldate: 'relative' }}</span> }
+            } @else { — }
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="updatedAt">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'common.updatedAt' | t }}</th>
+          <td mat-cell *matCellDef="let t" class="muted">{{ t.updatedAt | ldate: 'relative' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let t" class="actions-cell" (click)="$event.stopPropagation()">
+            @if (canQuickProgress(t)) {
+              <button mat-icon-button [matMenuTriggerFor]="pm" [matTooltip]="'tasks.quickProgress' | t"><mat-icon>speed</mat-icon></button>
+              <mat-menu #pm="matMenu">
+                @for (v of [25, 50, 75, 100]; track v) {
+                  <button mat-menu-item (click)="setProgress(t, v)" [disabled]="t.progressPercent === v">{{ v }}%</button>
+                }
+              </mat-menu>
+            }
+            <a mat-icon-button [routerLink]="['/tasks', t.id]" [matTooltip]="'common.details' | t"><mat-icon class="flip-rtl">chevron_right</mat-icon></a>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns" class="clickable" [class.row-overdue]="row.isOverdue" (click)="open(row)"></tr>
+      </table>
+    </div>
+    @if (!loading() && items().length === 0) {
+      <app-empty-state icon="assignment_turned_in" [message]="(hasFilters() ? 'tasks.emptyFiltered' : 'tasks.empty') | t" />
+    }
+    <mat-paginator [length]="total()" [pageIndex]="page() - 1" [pageSize]="pageSize()" [pageSizeOptions]="[10, 20, 50, 100]"
+                   (page)="onPage($event)" showFirstLastButtons />
+  </div>
+}

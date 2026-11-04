@@ -1,0 +1,81 @@
+{
+  "attendance": {
+    "checkIn": "Check in", "checkOut": "Check out", "workingHours": "Working hours", "late": "Late", "earlyLeave": "Early leave",
+    "shift": "Shift", "searchHint": "Name or employee code",
+    "geo": {
+      "unsupported": "Your browser does not support location services.",
+      "denied": "Location permission was denied. Allow location access for this site and try again.",
+      "timeout": "Getting your location took too long. Move closer to a window or enable precise location and try again.",
+      "unavailable": "Your location could not be determined. Enable location services and try again.",
+      "locating": "Verifying your location…"
+    },
+    "verify": {
+      "any": "On-site verification (any one of):", "all": "On-site verification (all required):",
+      "qrHint": "You can also scan the QR code shown on the screen at the entrance with your phone camera."
+    },
+    "my": {
+      "title": "My Attendance", "subtitle": "Record your arrival and departure and review your history",
+      "schedule": "Working hours {{start}} – {{end}}", "holiday": "Today is a holiday: {{name}}", "onLeave": "You are on approved leave today.",
+      "weekend": "Today is not a working day.", "lateBy": "Late by {{m}}", "notYet": "You have not checked in today.",
+      "wfh": "Working from home today", "checkedIn": "Check-in recorded", "checkedOut": "Check-out recorded",
+      "thisMonth": "This month", "daysPresent": "Days present", "daysLate": "Late arrivals", "daysAbsent": "Days absent", "hours": "Hours worked"
+    },
+    "scan": {
+      "title": "QR attendance", "noToken": "This link has no QR token. Scan the code displayed at the entrance again.",
+      "prompt": "Confirm your attendance now — the code expires shortly.", "doneIn": "Check-in recorded at {{time}}.",
+      "doneOut": "Check-out recorded at {{time}}.", "nothing": "There is nothing to record right now (attendance already completed for today).",
+      "expiry": "Code valid for about {{s}} more seconds", "expired": "The QR code has expired. Please scan the current code again.",
+      "goToMy": "Go to My Attendance"
+    },
+    "kiosk": {
+      "exit": "Exit", "scan": "Scan to check in or out", "refreshIn": "New code in {{s}} s",
+      "disabled": "QR attendance is disabled", "disabledHint": "Enable QR code verification in System Settings to use this screen.",
+      "offline": "Connection lost — retrying…"
+    },
+    "daily": {
+      "title": "Daily Attendance", "subtitle": "Who is in, late, absent or on leave for the selected day",
+      "present": "Present", "absent": "Absent", "late": "Late", "earlyLeave": "Early leave", "expected": "{{n}} expected", "state": "State",
+      "states": {
+        "present": "Present (checked in)", "late": "Late", "inside": "Inside now", "earlyleave": "Left early", "Absent": "Absent",
+        "NotArrived": "Not arrived yet", "OnLeave": "On leave", "MissingCheckOut": "Missing check-out", "CheckedOut": "Checked out",
+        "WorkFromHome": "Work from home", "Holiday": "Holiday", "Weekend": "Weekend"
+      }
+    },
+    "history": {
+      "title": "Attendance History", "subtitle": "Search attendance records by date, employee, department and status",
+      "employeeName": "Employee name", "onlyLate": "Late only", "onlyEarly": "Early leave only", "onlyMissing": "Missing check-out",
+      "oneEmployee": "Single employee", "showEmployee": "Show this employee's history", "edited": "Corrected by HR"
+    },
+    "absences": {
+      "title": "Absence Reports", "subtitle": "Employees absent on working days (weekends, holidays and approved leave excluded)",
+      "singleDay": "Single day", "total": "Absences", "employees": "Employees affected", "onPage": "on this page",
+      "status": "Absence status", "none": "No absences for the selected period"
+    },
+    "analytics": {
+      "title": "Attendance Analytics", "subtitle": "Trends, departments and individual performance",
+      "summaryReport": "Attendance summary", "performanceReport": "Employee performance", "comparison": "Comparison period",
+      "trend": "Daily attendance trend", "byDepartment": "By department", "top": "Top performers", "bottom": "Needs attention",
+      "absentLate": "{{a}} absent · {{l}} late", "perEmployee": "Per-employee summary", "expected": "Expected", "present": "Present days",
+      "absent": "Absent days", "late": "Late days", "avg": "avg", "punctuality": "Punctuality", "vsPrevious": "vs previous"
+    },
+    "correct": {
+      "action": "Correct record", "title": "Correct attendance", "manualTitle": "Add attendance record",
+      "nextDay": "Check-out is on the next day (overnight)", "statusOverride": "Status", "autoStatus": "Calculate automatically",
+      "statusHint": "Absent, On leave and Holiday clear the times.", "reason": "Reason for the change",
+      "reasonHint": "Required — stored in the audit log and shown to the employee.",
+      "timeOrder": "Check-out must be after check-in, and a check-out needs a check-in (or choose a status)."
+    },
+    "details": {
+      "title": "Attendance record", "verifiedIn": "Check-in verification", "verifiedOut": "Check-out verification",
+      "notVerified": "Not verified", "ipIn": "Check-in IP", "ipOut": "Check-out IP", "locationIn": "Check-in location",
+      "locationOut": "Check-out location", "editedBy": "Last edited by"
+    },
+    "leave": {
+      "title": "Leave Requests", "subtitle": "Request time off and review your team's requests", "new": "New request",
+      "type": "Leave type", "mine": "My requests", "toReview": "To review", "approve": "Approve", "reject": "Reject",
+      "cancel": "Cancel request", "cancelConfirm": "Cancel this leave request?", "empty": "No leave requests",
+      "noteOptional": "Note (optional)", "rejectReason": "Reason for rejection", "approved": "Leave approved", "rejected": "Leave rejected",
+      "submitted": "Leave request submitted"
+    }
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "admin": {
+    "employees": {
+      "title": "Employee Management", "subtitle": "Employee profiles, departments, teams and login accounts",
+      "add": "Add employee", "edit": "Edit employee", "searchHint": "Name, code or email", "teams": "Teams", "jobTitle": "Job title",
+      "hireDate": "Hire date", "account": "Account", "hasAccount": "Has a login account", "noAccount": "No login account",
+      "remoteAllowed": "Remote check-in allowed", "attendanceHistory": "Attendance history", "deleteTitle": "Delete employee",
+      "deleteMessage": "{{name}} will be deactivated and removed from lists. Attendance and task history is kept and the login account is disabled.",
+      "codePattern": "Use letters, digits, '-' or '_' only", "email": "Work email", "firstName": "First name", "lastName": "Last name",
+      "phone": "Phone", "workSchedule": "Work schedule", "defaultSchedule": "Company default", "allowRemote": "Allow check-in without on-site verification (remote / work from home)",
+      "createAccount": "Create a login account for this employee", "createAccountHint": "The employee signs in with the work email and this password."
+    },
+    "departments": {
+      "title": "Department Management", "subtitle": "Organizational units and their managers", "add": "Add department",
+      "edit": "Edit department", "noManager": "No manager assigned", "employees": "employees", "teams": "teams"
+    },
+    "teams": {
+      "title": "Team Management", "subtitle": "Teams, team leaders and members", "add": "Add team", "edit": "Edit team",
+      "leader": "Team leader", "addMember": "Add member", "removeMember": "Remove from team", "joined": "joined", "noMembers": "No members yet"
+    },
+    "users": {
+      "title": "Users & Roles", "subtitle": "Login accounts, role assignment and access control", "create": "Create user", "edit": "Edit user",
+      "usersTab": "Users", "rolesTab": "Roles & permissions", "role": "Role", "roles": "Roles", "lastLogin": "Last login", "never": "Never",
+      "locked": "Locked", "resetPassword": "Reset password", "unlock": "Unlock", "unlocked": "Account unlocked",
+      "rolesHint": "Permissions are granted through roles and enforced by the server on every request.",
+      "userCount": "{{count}} users", "fullName": "Full name", "linkedEmployee": "Linked employee profile",
+      "roleRequired": "At least one role is required", "resetPasswordFor": "Set a new password for {{name}}. All of their sessions will be signed out.",
+      "passwordReset": "Password reset", "deleteMessage": "Delete the account of {{name}}? Accounts with task history are disabled instead of deleted."
+    },
+    "roleDescriptions": {
+      "SuperAdmin": "Full access: users, roles, departments, teams, settings, all attendance, tasks and reports.",
+      "Admin": "HR / administration: attendance for all employees, corrections with audit trail, reports, exports and task assignment.",
+      "Manager": "Sees and manages only the employees of the departments they manage and teams they lead.",
+      "Employee": "Records own attendance, views own history and works on assigned tasks."
+    },
+    "permissions": {
+      "users_manage": "Manage users", "roles_manage": "Assign roles", "settings_manage": "System settings",
+      "departments_manage": "Manage departments", "teams_manage": "Manage teams", "employees_view": "View employees",
+      "employees_manage": "Manage employees", "attendance_self": "Own attendance", "attendance_view_team": "Team attendance",
+      "attendance_view_all": "All attendance", "attendance_correct": "Correct attendance", "attendance_kiosk": "QR kiosk display",
+      "leave_approve": "Approve leave", "holidays_manage": "Manage holidays", "tasks_assign": "Assign tasks", "tasks_review": "Review tasks",
+      "tasks_view_all": "View all tasks", "reports_view": "View reports", "reports_export": "Export reports", "audit_view": "View audit log"
+    },
+    "settings": {
+      "title": "System Settings", "subtitle": "Company configuration, attendance rules and on-site verification", "lastUpdated": "Last updated",
+      "general": "General", "company": "Company", "companyName": "Company name", "timeZone": "Company time zone",
+      "attendanceRules": "Attendance rules", "allowMultipleShifts": "Allow multiple shifts per day",
+      "allowMultipleShiftsHint": "When off, each employee can record attendance only once per working day.", "maxShifts": "Max shifts per day",
+      "finalizeDelay": "Finalize day after", "finalizeDelayHint": "Delay after the schedule end before absences and missing check-outs are recorded",
+      "reminderHours": "Task deadline reminder", "reminderHoursHint": "Notify assignees this many hours before a task is due",
+      "verification": "On-site verification",
+      "noVerification": "No verification method is enabled — employees can record attendance from anywhere.",
+      "verificationOn": "{{count}} verification method(s) enabled — attendance outside the headquarters is rejected.",
+      "policy": "Verification policy", "policyAny": "Any enabled method", "policyAll": "All enabled methods",
+      "policyAnyHint": "Check-in succeeds when at least one enabled method passes (e.g. GPS OR company Wi-Fi OR QR).",
+      "policyAllHint": "Check-in succeeds only when every enabled method passes (strictest).",
+      "verifyCheckOut": "Also require verification on check-out",
+      "remoteHint": "Employees flagged “Allow remote check-in” can record Work From Home without verification.",
+      "geofence": "Geofence (GPS)", "geofenceHint": "The device location must be within the radius of the office.",
+      "latitude": "Office latitude", "longitude": "Office longitude", "radius": "Allowed radius", "maxAccuracy": "Max GPS inaccuracy",
+      "useMyLocation": "Use my current location", "locating": "Locating…", "openMap": "View on map",
+      "geoUnsupported": "This browser does not support geolocation.", "geoError": "Could not get your location.",
+      "locationSet": "Office location set (accuracy ±{{accuracy}} m). Remember to save.",
+      "network": "Company network", "networkHint": "The request must come from an allowed IP address or range (office Wi-Fi / LAN).",
+      "ipRanges": "Allowed IP addresses / CIDR ranges", "ipRangesHint": "One per line or comma separated, e.g. 192.168.1.0/24",
+      "detectIp": "Add my current IP", "ipAdded": "{{ip}} added. Remember to save.", "ipAlreadyListed": "{{ip}} is already listed.",
+      "proxyHint": "If the API runs behind a reverse proxy, configure ReverseProxy:KnownProxies so the real client IP is used.",
+      "qr": "Rotating QR code", "qrHint": "Employees scan a code shown on the entrance screen; codes expire automatically.",
+      "qrRotation": "Code rotation interval", "openKiosk": "Open kiosk screen", "regenerateQr": "Regenerate QR secret",
+      "regenerate": "Regenerate", "regenerateQrConfirm": "All QR codes currently displayed become invalid immediately. Continue?",
+      "qrRegenerated": "QR secret regenerated", "qrSaveFirst": "Save the settings before opening the kiosk screen.",
+      "fixErrors": "Please fix the highlighted fields.",
+      "schedules": "Work schedules", "schedulesHint": "Working hours, grace periods and weekends used for late / absence calculations.",
+      "addSchedule": "Add schedule", "editSchedule": "Edit schedule", "default": "Default", "defaultSchedule": "Default schedule",
+      "workingHours": "Working hours", "grace": "Grace periods", "lateShort": "Late", "earlyShort": "Early", "halfDayShort": "Half day below {{h}} h",
+      "weekendDays": "Weekend days", "startTime": "Start time", "endTime": "End time", "lateGrace": "Late grace", "earlyGrace": "Early-leave grace",
+      "halfDayThreshold": "Half-day threshold", "timeOrder": "End time must be after start time.",
+      "holidays": "Holidays", "year": "Year", "holidaysHint": "Holidays are excluded from absence detection.", "addHoliday": "Add holiday",
+      "editHoliday": "Edit holiday", "noHolidays": "No holidays for this year"
+    },
+    "audit": {
+      "title": "Audit Log", "subtitle": "Traceability of sensitive operations", "time": "Time", "user": "User", "system": "System",
+      "entity": "Entity", "action": "Action", "oldValues": "Before", "newValues": "After"
+    }
+  }
+}

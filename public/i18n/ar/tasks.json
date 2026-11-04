@@ -1,0 +1,59 @@
+{
+  "tasks": {
+    "newTask": "مهمة جديدة",
+    "overdue": "متأخرة",
+    "quickProgress": "تحديث نسبة الإنجاز",
+    "empty": "لا توجد مهام بعد",
+    "emptyFiltered": "لا توجد مهام مطابقة لعوامل التصفية",
+    "list": { "title": "إدارة المهام", "subtitle": "إسناد العمل ومتابعته ومراجعته في جميع الفرق" },
+    "my": { "title": "مهامي", "subtitle": "المهام المسندة إليك ومواعيد تسليمها", "dueSoon": "مواعيد التسليم القادمة" },
+    "views": { "table": "عرض الجدول", "board": "عرض كانبان" },
+    "stats": { "assigned": "+{{count}} مُسندة", "dueThisWeek": "{{count}} مستحقة هذا الأسبوع" },
+    "filters": { "mineOnly": "مهامي فقط", "dueRange": "تاريخ التسليم بين", "overdueOnly": "المتأخرة فقط", "createdByMe": "أنشأتها أنا" },
+    "fields": {
+      "title": "العنوان", "description": "الوصف", "priority": "الأولوية", "startDate": "تاريخ البدء", "startTime": "وقت البدء",
+      "dueDate": "تاريخ التسليم", "dueTime": "وقت التسليم", "assignees": "المكلّفون", "assignee": "المكلّف", "assignedBy": "أسندها",
+      "progress": "نسبة الإنجاز", "completionDate": "تاريخ الإنجاز"
+    },
+    "form": {
+      "createTitle": "إنشاء مهمة", "editTitle": "تعديل المهمة", "autoDepartment": "تلقائي (من أول مكلّف)",
+      "dueBeforeStart": "يجب أن يكون تاريخ التسليم بعد تاريخ البدء.",
+      "assigneesHint": "اختر موظفاً أو أكثر. الأول هو المكلّف الرئيسي."
+    },
+    "board": {
+      "title": "لوحة كانبان", "subtitle": "اسحب البطاقات بين الأعمدة لتحديث حالتها",
+      "showCancelled": "إظهار الملغاة", "empty": "أفلت المهام هنا", "truncated": "يتم عرض أول 200 مهمة من أصل {{count}}. استخدم التصفية لتضييق النتائج."
+    },
+    "actions": {
+      "start": "بدء العمل", "resume": "إعادة إلى قيد التنفيذ", "reopen": "إعادة فتح", "submit": "تقديم للمراجعة", "approve": "اعتماد",
+      "reject": "رفض", "cancel": "إلغاء المهمة", "restore": "استعادة", "markAssigned": "تعيين كمُسندة"
+    },
+    "details": {
+      "notFound": "هذه المهمة غير موجودة أو ليست لديك صلاحية الوصول إليها.",
+      "nextSteps": "الخطوات التالية:", "rejectionReason": "سبب الرفض", "reviewFeedback": "ملاحظات المراجِع",
+      "noDescription": "لا يوجد وصف.", "saveProgress": "حفظ نسبة الإنجاز", "primary": "رئيسي", "unassigned": "لم تُسند بعد",
+      "rejectPrompt": "وضّح سبب رفض \"{{title}}\". سيرى المكلّفون هذا السبب.",
+      "cancelPrompt": "هل تريد إلغاء هذه المهمة؟ سيتم إشعار المكلّفين.",
+      "approvePrompt": "اعتماد العمل وتعيين المهمة كمكتملة؟",
+      "feedbackOptional": "ملاحظات (اختياري)", "deleteTitle": "حذف المهمة"
+    },
+    "tabs": { "comments": "التعليقات", "attachments": "المرفقات", "history": "السجل" },
+    "comments": { "empty": "لا توجد تعليقات بعد. ابدأ المحادثة.", "add": "اكتب تعليقاً", "hint": "Ctrl + Enter للإرسال" },
+    "attachments": {
+      "upload": "رفع ملف", "uploading": "جارٍ الرفع…", "uploaded": "تم رفع الملف", "download": "تنزيل",
+      "rules": "PDF أو مستندات Office أو نصوص أو CSV أو صور أو ZIP · بحد أقصى 10 ميغابايت", "empty": "لا توجد مرفقات",
+      "typeNotAllowed": "نوع الملف {{ext}} غير مسموح به.", "tooLarge": "يجب أن يكون حجم الملف بين بايت واحد و10 ميغابايت.",
+      "deleteTitle": "حذف المرفق"
+    },
+    "history": {
+      "actions": {
+        "Created": "إنشاء المهمة", "Updated": "تحديث التفاصيل", "StatusChanged": "تغيير الحالة", "ProgressUpdated": "تحديث نسبة الإنجاز",
+        "Commented": "إضافة تعليق", "AttachmentAdded": "إضافة مرفق", "AttachmentRemoved": "حذف مرفق", "Overdue": "تجاوزت موعد التسليم"
+      }
+    },
+    "messages": {
+      "created": "تم إنشاء المهمة وإشعار المكلّفين", "updated": "تم تحديث المهمة", "progressUpdated": "تم ضبط نسبة الإنجاز على {{value}}٪",
+      "statusChanged": "تم تغيير الحالة إلى {{status}}"
+    }
+  }
+}

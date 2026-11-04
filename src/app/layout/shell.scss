@@ -1,0 +1,78 @@
+:host { display: block; height: 100vh; }
+
+.shell { height: 100%; background: var(--app-bg); }
+
+.sidebar {
+  width: 264px;
+  border: none;
+  background: var(--sidebar-bg);
+  color: var(--sidebar-fg);
+  transition: width 0.2s ease;
+  &.collapsed { width: 72px; }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 16px;
+  min-height: 64px;
+  box-sizing: border-box;
+  &__logo {
+    width: 40px; height: 40px; border-radius: 12px; flex: none;
+    display: grid; place-items: center;
+    background: linear-gradient(135deg, #3b82f6, #6366f1); color: #fff;
+  }
+  &__text { display: flex; flex-direction: column; line-height: 1.2; overflow: hidden;
+    strong { font-size: 15px; color: #fff; white-space: nowrap; }
+    span { font-size: 11.5px; opacity: 0.65; white-space: nowrap; }
+  }
+}
+
+.nav {
+  padding: 4px 10px 24px;
+  &__group { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.5; padding: 16px 12px 6px; }
+  &__sep { height: 1px; background: rgba(255, 255, 255, 0.08); margin: 10px 8px; }
+  &__item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 9px 12px; margin: 2px 0; border-radius: 10px;
+    color: inherit; text-decoration: none; font-size: 14px;
+    transition: background 0.15s;
+    mat-icon { font-size: 21px; width: 21px; height: 21px; opacity: 0.85; flex: none; }
+    span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    &:hover { background: rgba(255, 255, 255, 0.07); }
+    &.active { background: rgba(59, 130, 246, 0.22); color: #fff; mat-icon { opacity: 1; color: #93c5fd; } }
+  }
+  &__badge {
+    margin-inline-start: auto; background: #ef4444; color: #fff; font-size: 11px; font-weight: 600;
+    border-radius: 999px; padding: 1px 7px;
+  }
+}
+
+.collapsed .nav__item { justify-content: center; padding: 10px; }
+
+.content { display: flex; flex-direction: column; }
+
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  background: var(--surface); color: var(--text);
+  border-bottom: 1px solid var(--border);
+  height: 64px; gap: 6px;
+  &__spacer { flex: 1; }
+}
+
+.lang-btn mat-icon { margin-inline-end: 4px; }
+
+.user-btn {
+  height: 46px; border-radius: 999px; padding-inline: 6px 10px;
+  ::ng-deep .mdc-button__label { display: flex; align-items: center; gap: 8px; }
+  &__text { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.15; text-align: start; }
+  &__name { font-size: 13.5px; font-weight: 600; }
+  &__role { font-size: 11px; color: var(--text-muted); }
+}
+
+.user-menu__head { display: flex; flex-direction: column; padding: 10px 16px 12px; span { font-size: 12px; color: var(--text-muted); } }
+
+.page { padding: 24px; max-width: 1600px; width: 100%; box-sizing: border-box; margin: 0 auto; }
+
+@media (max-width: 600px) { .page { padding: 14px; } }

@@ -1,0 +1,80 @@
+{
+  "app": { "name": "منصة المقر", "tagline": "إدارة الحضور والمهام" },
+  "nav": {
+    "toggle": "إظهار/إخفاء القائمة",
+    "overview": "نظرة عامة", "dashboard": "لوحة التحكم", "notifications": "الإشعارات",
+    "attendance": "الحضور", "myAttendance": "حضوري", "leave": "طلبات الإجازة", "dailyAttendance": "الحضور اليومي",
+    "attendanceHistory": "سجل الحضور", "absences": "تقارير الغياب", "analytics": "تحليلات الحضور", "kiosk": "شاشة رمز QR",
+    "tasks": "المهام", "myTasks": "مهامي", "taskManagement": "إدارة المهام", "kanban": "لوحة كانبان",
+    "administration": "الإدارة", "employees": "الموظفون", "departments": "الأقسام", "teams": "الفرق",
+    "users": "المستخدمون والأدوار", "settings": "إعدادات النظام", "audit": "سجل التدقيق"
+  },
+  "common": {
+    "save": "حفظ", "cancel": "إلغاء", "close": "إغلاق", "confirm": "تأكيد", "delete": "حذف", "edit": "تعديل", "add": "إضافة",
+    "create": "إنشاء", "update": "تحديث", "search": "بحث", "filter": "تصفية", "reset": "إعادة تعيين", "apply": "تطبيق",
+    "export": "تصدير", "refresh": "تحديث", "view": "عرض", "details": "التفاصيل", "actions": "الإجراءات", "yes": "نعم", "no": "لا",
+    "all": "الكل", "none": "لا يوجد", "active": "نشط", "inactive": "غير نشط", "status": "الحالة", "date": "التاريخ", "from": "من",
+    "to": "إلى", "today": "اليوم", "name": "الاسم", "nameAr": "الاسم (بالعربية)", "code": "الرمز", "description": "الوصف",
+    "department": "القسم", "team": "الفريق", "employee": "الموظف", "employeeCode": "الرقم الوظيفي", "notes": "ملاحظات",
+    "reason": "السبب", "language": "اللغة", "loading": "جارٍ التحميل…", "noData": "لا توجد بيانات", "required": "مطلوب",
+    "saved": "تم الحفظ بنجاح", "deleted": "تم الحذف بنجاح", "areYouSure": "هل أنت متأكد؟",
+    "deleteConfirm": "لا يمكن التراجع عن هذا الإجراء. هل تريد حذف \"{{name}}\"؟", "back": "رجوع", "submit": "إرسال",
+    "total": "الإجمالي", "createdAt": "تاريخ الإنشاء", "updatedAt": "آخر تحديث", "by": "بواسطة", "minutes": "دقيقة", "hours": "ساعة", "days": "أيام",
+    "dateRange": "الفترة", "startDate": "تاريخ البداية", "endDate": "تاريخ النهاية", "optional": "اختياري", "manager": "المدير",
+    "members": "الأعضاء", "period": "الفترة", "comparePeriod": "مقارنة مع", "percent": "٪", "open": "فتح"
+  },
+  "auth": {
+    "welcome": "مرحباً بعودتك", "signInPrompt": "سجّل الدخول بحساب الشركة", "email": "البريد الإلكتروني", "password": "كلمة المرور",
+    "signIn": "تسجيل الدخول", "logout": "تسجيل الخروج", "changePassword": "تغيير كلمة المرور", "currentPassword": "كلمة المرور الحالية",
+    "newPassword": "كلمة المرور الجديدة", "passwordHint": "8 أحرف على الأقل تتضمن حروفاً كبيرة وصغيرة ورقماً",
+    "passwordChanged": "تم تغيير كلمة المرور. يرجى تسجيل الدخول مجدداً.",
+    "heroText": "منصة واحدة لتسجيل الحضور في المقر الرئيسي ومتابعة الفرق وإنجاز العمل في الوقت المحدد.",
+    "feature1": "تسجيل حضور موثّق عبر الموقع الجغرافي أو شبكة الشركة أو رمز QR",
+    "feature2": "إسناد المهام ومتابعتها ومراجعتها مع سجل كامل",
+    "feature3": "لوحات معلومات لحظية وتحليلات وتقارير قابلة للتصدير"
+  },
+  "errors": {
+    "unexpected": "حدث خطأ غير متوقع.", "network": "تعذّر الاتصال بالخادم. تحقق من الاتصال.",
+    "forbidden": "ليست لديك صلاحية للقيام بذلك.", "notFound": "العنصر المطلوب غير موجود.",
+    "tooMany": "طلبات كثيرة جداً. يرجى الانتظار قليلاً."
+  },
+  "dashboard": {
+    "title": "لوحة التحكم", "greeting": "مرحباً، {{name}}", "subtitle": "إليك ما يحدث اليوم",
+    "totalEmployees": "إجمالي الموظفين", "presentToday": "الحاضرون اليوم", "absentToday": "الغائبون اليوم", "lateToday": "المتأخرون اليوم",
+    "onLeave": "في إجازة", "insideNow": "داخل الشركة الآن", "attendanceRate": "نسبة الحضور", "wfh": "العمل من المنزل",
+    "trend": "اتجاه الحضور (آخر 14 يوماً)", "taskOverview": "ملخص المهام", "myDay": "يومي", "goToAttendance": "فتح الحضور",
+    "checkedInAt": "سجّلت الحضور الساعة {{time}}", "checkedOutAt": "سجّلت الانصراف الساعة {{time}}", "notCheckedIn": "لم تسجّل الحضور بعد",
+    "totalTasks": "إجمالي المهام", "newTasks": "جديدة", "inProgress": "قيد التنفيذ", "pendingReview": "بانتظار المراجعة",
+    "completed": "مكتملة", "overdue": "متأخرة", "dueThisWeek": "مستحقة هذا الأسبوع", "byPriority": "المهام المفتوحة حسب الأولوية",
+    "present": "حاضر", "absent": "غائب", "late": "متأخر", "holiday": "عطلة: {{name}}", "weekend": "ليس يوم عمل",
+    "schedule": "الدوام {{start}} – {{end}}", "viewTasks": "عرض المهام"
+  },
+  "notifications": {
+    "title": "الإشعارات", "subtitle": "تحديثات حول مهامك وحضورك", "markAllRead": "تعليم الكل كمقروء",
+    "markRead": "تعليم كمقروء", "empty": "لا توجد إشعارات جديدة", "viewAll": "عرض كل الإشعارات", "unreadOnly": "غير المقروءة فقط",
+    "type": "النوع"
+  },
+  "enums": {
+    "status": {
+      "Present": "حاضر", "Absent": "غائب", "Late": "متأخر", "HalfDay": "نصف يوم", "EarlyLeave": "انصراف مبكر",
+      "OnLeave": "في إجازة", "Holiday": "عطلة", "WorkFromHome": "عمل من المنزل",
+      "Inside": "داخل الشركة", "CheckedOut": "انصرف", "MissingCheckOut": "انصراف غير مسجل", "Weekend": "عطلة أسبوعية",
+      "Upcoming": "قادم", "NotArrived": "لم يصل", "NotCheckedIn": "لم يسجّل الحضور", "PendingLeave": "إجازة قيد الطلب",
+      "New": "جديدة", "Assigned": "مُسندة", "InProgress": "قيد التنفيذ", "PendingReview": "بانتظار المراجعة", "Completed": "مكتملة",
+      "Rejected": "مرفوضة", "Cancelled": "ملغاة",
+      "Low": "منخفضة", "Medium": "متوسطة", "High": "عالية", "Urgent": "عاجلة",
+      "Pending": "قيد الانتظار", "Approved": "موافق عليها",
+      "true": "نشط", "false": "غير نشط"
+    },
+    "role": { "SuperAdmin": "مدير النظام", "Admin": "الإدارة / الموارد البشرية", "Manager": "مدير / قائد فريق", "Employee": "موظف" },
+    "leaveType": { "Annual": "سنوية", "Sick": "مرضية", "Unpaid": "بدون راتب", "Emergency": "طارئة", "Other": "أخرى" },
+    "day": { "Sunday": "الأحد", "Monday": "الإثنين", "Tuesday": "الثلاثاء", "Wednesday": "الأربعاء", "Thursday": "الخميس", "Friday": "الجمعة", "Saturday": "السبت" },
+    "notificationType": {
+      "TaskAssigned": "مهمة جديدة", "TaskDeadlineApproaching": "اقتراب الموعد", "TaskOverdue": "مهمة متأخرة",
+      "TaskApproved": "موافقة على مهمة", "TaskRejected": "رفض مهمة", "TaskComment": "تعليق", "TaskStatusChanged": "تغيّر الحالة",
+      "AttendanceUpdated": "تعديل الحضور", "AttendanceAttention": "تنبيه حضور", "LeaveRequest": "طلب إجازة", "System": "النظام"
+    },
+    "verification": { "None": "بدون", "Geofence": "الموقع الجغرافي", "Network": "شبكة الشركة", "QrCode": "رمز QR" },
+    "source": { "Web": "الويب", "QrCode": "رمز QR", "Manual": "يدوي (الموارد البشرية)", "System": "النظام" }
+  }
+}

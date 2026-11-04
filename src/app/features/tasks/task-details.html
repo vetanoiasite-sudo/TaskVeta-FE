@@ -1,0 +1,199 @@
+<app-loading-bar [loading]="loading() || busy()" />
+
+@if (notFound()) {
+  <div class="card">
+    <app-empty-state icon="search_off" [message]="'tasks.details.notFound' | t">
+      <a mat-stroked-button routerLink="/tasks/my">{{ 'common.back' | t }}</a>
+    </app-empty-state>
+  </div>
+}
+
+@if (details(); as d) {
+  <div class="head">
+    <button mat-icon-button (click)="back()" [matTooltip]="'common.back' | t" class="back">
+      <mat-icon class="flip-rtl">arrow_back</mat-icon>
+    </button>
+    <div class="head__main">
+      <div class="row chips">
+        <span class="task-id">#{{ d.task.id }}</span>
+        <app-status-chip [value]="d.task.status" />
+        <app-status-chip [value]="d.task.priority" />
+        @if (d.task.isOverdue) { <span class="chip tone-danger"><mat-icon class="chip-icon">schedule</mat-icon>{{ 'tasks.overdue' | t }}</span> }
+      </div>
+      <h1>{{ d.task.title }}</h1>
+    </div>
+    <div class="head__actions">
+      @if (d.permissions.canEdit) {
+        <button mat-stroked-button (click)="edit()"><mat-icon>edit</mat-icon>{{ 'common.edit' | t }}</button>
+        <button mat-icon-button (click)="remove()" [matTooltip]="'common.delete' | t"><mat-icon>delete_outline</mat-icon></button>
+      }
+    </div>
+  </div>
+
+  @if (actions().length) {
+    <div class="action-bar card">
+      <span class="muted">{{ 'tasks.details.nextSteps' | t }}</span>
+      @for (a of actions(); track a.status) {
+        <button mat-flat-button [class]="'act act-' + a.tone" [disabled]="busy()" (click)="apply(a)">
+          <mat-icon>{{ a.icon }}</mat-icon>{{ a.labelKey | t }}
+        </button>
+      }
+    </div>
+  }
+
+  @if (d.reviewNotes && (d.task.status === 'Rejected' || d.task.status === 'Completed')) {
+    <div class="alert" [class.alert-danger]="d.task.status === 'Rejected'" [class.alert-success]="d.task.status === 'Completed'">
+      <mat-icon>{{ d.task.status === 'Rejected' ? 'feedback' : 'verified' }}</mat-icon>
+      <div><strong>{{ (d.task.status === 'Rejected' ? 'tasks.details.rejectionReason' : 'tasks.details.reviewFeedback') | t }}:</strong> {{ d.reviewNotes }}</div>
+    </div>
+  }
+
+  <div class="layout">
+    <div class="main">
+      <div class="card">
+        <h3 class="card__title">{{ 'tasks.fields.description' | t }}</h3>
+        @if (d.description) { <p class="description">{{ d.description }}</p> }
+        @else { <p class="muted">{{ 'tasks.details.noDescription' | t }}</p> }
+
+        <div class="progress-block">
+          <div class="row">
+            <strong>{{ 'tasks.fields.progress' | t }}</strong>
+            <span class="spacer"></span>
+            <span class="pct">{{ progress() }}%</span>
+          </div>
+          @if (d.permissions.canUpdateProgress) {
+            <mat-slider min="0" max="100" step="5" discrete class="w-100">
+              <input matSliderThumb [ngModel]="progress()" (ngModelChange)="progress.set($event)" />
+            </mat-slider>
+            @if (progress() !== d.task.progressPercent) {
+              <div class="row">
+                <button mat-flat-button (click)="saveProgress()" [disabled]="busy()">{{ 'tasks.details.saveProgress' | t }}</button>
+                <button mat-button (click)="progress.set(d.task.progressPercent)">{{ 'common.cancel' | t }}</button>
+              </div>
+            }
+          } @else {
+            <div class="progress-mini big"><div class="bar"><div class="fill" [style.width.%]="d.task.progressPercent"></div></div></div>
+          }
+        </div>
+      </div>
+
+      <div class="card p-0 tabs-card">
+        <mat-tab-group [selectedIndex]="tab()" (selectedIndexChange)="tab.set($event)" animationDuration="150ms">
+          <mat-tab [label]="('tasks.tabs.comments' | t) + ' (' + d.comments.length + ')'">
+            <div class="tab-body">
+              @for (c of d.comments; track c.id) {
+                <div class="comment" [class.mine]="c.userId === myUserId()">
+                  <app-avatar [name]="c.userName" [size]="34" />
+                  <div class="comment__bubble">
+                    <div class="comment__meta"><strong>{{ c.userName }}</strong><span>{{ c.createdAt | ldate: 'relative' }}</span></div>
+                    <p>{{ c.content }}</p>
+                  </div>
+                </div>
+              } @empty {
+                <app-empty-state icon="forum" [message]="'tasks.comments.empty' | t" />
+              }
+              @if (d.permissions.canComment) {
+                <div class="comment-form">
+                  <mat-form-field class="w-100">
+                    <mat-label>{{ 'tasks.comments.add' | t }}</mat-label>
+                    <textarea matInput rows="2" maxlength="4000" [ngModel]="comment()" (ngModelChange)="comment.set($event)"
+                              (keydown.control.enter)="addComment()"></textarea>
+                    <mat-hint>{{ 'tasks.comments.hint' | t }}</mat-hint>
+                  </mat-form-field>
+                  <button mat-flat-button (click)="addComment()" [disabled]="!comment().trim() || busy()">
+                    <mat-icon>send</mat-icon>{{ 'common.submit' | t }}
+                  </button>
+                </div>
+              }
+            </div>
+          </mat-tab>
+
+          <mat-tab [label]="('tasks.tabs.attachments' | t) + ' (' + d.attachments.length + ')'">
+            <div class="tab-body">
+              <div class="upload row">
+                <input #file type="file" hidden [accept]="accept" (change)="onFile($event)" />
+                <button mat-stroked-button (click)="file.click()" [disabled]="uploading()">
+                  <mat-icon>upload_file</mat-icon>{{ (uploading() ? 'tasks.attachments.uploading' : 'tasks.attachments.upload') | t }}
+                </button>
+                <span class="muted small">{{ 'tasks.attachments.rules' | t }}</span>
+              </div>
+              @for (a of d.attachments; track a.id) {
+                <div class="file">
+                  <mat-icon class="file__icon">{{ fileIcon(a.fileName) }}</mat-icon>
+                  <div class="file__info">
+                    <button class="link" (click)="download(a)">{{ a.fileName }}</button>
+                    <span class="muted small">{{ fileSize(a.sizeBytes) }} · {{ a.uploadedByName }} · {{ a.createdAt | ldate: 'relative' }}</span>
+                  </div>
+                  <button mat-icon-button (click)="download(a)" [matTooltip]="'tasks.attachments.download' | t"><mat-icon>download</mat-icon></button>
+                  @if (canDeleteAttachment(a)) {
+                    <button mat-icon-button (click)="deleteAttachment(a)" [matTooltip]="'common.delete' | t"><mat-icon>delete_outline</mat-icon></button>
+                  }
+                </div>
+              } @empty {
+                <app-empty-state icon="attach_file" [message]="'tasks.attachments.empty' | t" />
+              }
+            </div>
+          </mat-tab>
+
+          <mat-tab [label]="'tasks.tabs.history' | t">
+            <div class="tab-body">
+              <ol class="timeline">
+                @for (h of history(); track h.id) {
+                  <li>
+                    <span class="timeline__dot"><mat-icon>{{ historyIcon(h.action) }}</mat-icon></span>
+                    <div class="timeline__body">
+                      <div class="row">
+                        <strong>{{ historyLabel(h.action) }}</strong>
+                        @if (h.fromStatus || h.toStatus) {
+                          <span class="transition">
+                            @if (h.fromStatus) { <app-status-chip [value]="h.fromStatus" /> <mat-icon class="flip-rtl arrow">arrow_forward</mat-icon> }
+                            @if (h.toStatus) { <app-status-chip [value]="h.toStatus" /> }
+                          </span>
+                        }
+                      </div>
+                      @if (h.details) { <p>{{ h.details }}</p> }
+                      <span class="muted small">{{ h.changedBy }} · {{ h.createdAt | ldate: 'datetime' }} ({{ h.createdAt | ldate: 'relative' }})</span>
+                    </div>
+                  </li>
+                } @empty {
+                  <app-empty-state icon="history" [message]="'common.noData' | t" />
+                }
+              </ol>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+
+    <aside class="side">
+      <div class="card info">
+        <h3 class="card__title">{{ 'common.details' | t }}</h3>
+        <dl>
+          <dt>{{ 'tasks.fields.assignedBy' | t }}</dt><dd>{{ d.task.assignedByName }}</dd>
+          <dt>{{ 'common.department' | t }}</dt><dd>{{ d.task.departmentName ?? '—' }}</dd>
+          <dt>{{ 'tasks.fields.startDate' | t }}</dt><dd>{{ d.task.startDate | ldate: 'datetime' }}</dd>
+          <dt>{{ 'tasks.fields.dueDate' | t }}</dt>
+          <dd [class.overdue]="d.task.isOverdue">{{ d.task.dueDate | ldate: 'datetime' }}
+            @if (d.task.dueDate && d.task.status !== 'Completed') { <span class="muted small block">{{ d.task.dueDate | ldate: 'relative' }}</span> }
+          </dd>
+          @if (d.task.completionDate) { <dt>{{ 'tasks.fields.completionDate' | t }}</dt><dd>{{ d.task.completionDate | ldate: 'datetime' }}</dd> }
+          <dt>{{ 'common.createdAt' | t }}</dt><dd>{{ d.task.createdAt | ldate: 'datetime' }}</dd>
+          <dt>{{ 'common.updatedAt' | t }}</dt><dd>{{ d.task.updatedAt | ldate: 'relative' }}</dd>
+        </dl>
+      </div>
+      <div class="card">
+        <h3 class="card__title">{{ 'tasks.fields.assignees' | t }} <span class="muted small">{{ d.task.assignees.length }}</span></h3>
+        @for (a of d.task.assignees; track a.employeeId; let first = $first) {
+          <div class="assignee">
+            <app-avatar [name]="a.fullName" [size]="34" />
+            <div><strong>{{ a.fullName }}</strong><span class="muted small block">{{ a.employeeCode }}
+              @if (first && d.task.assignees.length > 1) { · {{ 'tasks.details.primary' | t }} }</span></div>
+          </div>
+        } @empty {
+          <p class="muted">{{ 'tasks.details.unassigned' | t }}</p>
+        }
+      </div>
+    </aside>
+  </div>
+}
+
