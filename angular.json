@@ -1,81 +1,86 @@
 {
-    "$schema":  "./node_modules/@angular/cli/lib/config/schema.json",
-    "version":  1,
-    "cli":  {
-                "packageManager":  "npm"
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "cli": {
+    "packageManager": "npm",
+    "analytics": "35bfd22f-1809-4136-adc5-12fb9c01c229"
+  },
+  "newProjectRoot": "projects",
+  "projects": {
+    "frontend": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "browser": "src/main.ts",
+            "tsConfig": "tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "public"
+              }
+            ],
+            "styles": [
+              "src/styles.scss"
+            ],
+            "outputPath": {
+              "base": "../backend/src/CompanyManagement.API/wwwroot",
+              "browser": ""
+            }
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "900kB",
+                  "maximumError": "1.5MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "12kB",
+                  "maximumError": "24kB"
+                }
+              ],
+              "outputHashing": "all"
             },
-    "newProjectRoot":  "projects",
-    "projects":  {
-                     "frontend":  {
-                                      "projectType":  "application",
-                                      "schematics":  {
-                                                         "@schematics/angular:component":  {
-                                                                                               "style":  "scss"
-                                                                                           }
-                                                     },
-                                      "root":  "",
-                                      "sourceRoot":  "src",
-                                      "prefix":  "app",
-                                      "architect":  {
-                                                        "build":  {
-                                                                      "builder":  "@angular/build:application",
-                                                                      "options":  {
-                                                                                      "browser":  "src/main.ts",
-                                                                                      "tsConfig":  "tsconfig.app.json",
-                                                                                      "inlineStyleLanguage":  "scss",
-                                                                                      "assets":  [
-                                                                                                     {
-                                                                                                         "glob":  "**/*",
-                                                                                                         "input":  "public"
-                                                                                                     }
-                                                                                                 ],
-                                                                                      "styles":  [
-                                                                                                     "src/styles.scss"
-                                                                                                 ]
-                                                                                  },
-                                                                      "configurations":  {
-                                                                                             "production":  {
-                                                                                                                "budgets":  [
-                                                                                                                                {
-                                                                                                                                    "type":  "initial",
-                                                                                                                                    "maximumWarning":  "900kB",
-                                                                                                                                    "maximumError":  "1.5MB"
-                                                                                                                                },
-                                                                                                                                {
-                                                                                                                                    "type":  "anyComponentStyle",
-                                                                                                                                    "maximumWarning":  "12kB",
-                                                                                                                                    "maximumError":  "24kB"
-                                                                                                                                }
-                                                                                                                            ],
-                                                                                                                "outputHashing":  "all"
-                                                                                                            },
-                                                                                             "development":  {
-                                                                                                                 "optimization":  false,
-                                                                                                                 "extractLicenses":  false,
-                                                                                                                 "sourceMap":  true
-                                                                                                             }
-                                                                                         },
-                                                                      "defaultConfiguration":  "production"
-                                                                  },
-                                                        "serve":  {
-                                                                      "builder":  "@angular/build:dev-server",
-                                                                      "configurations":  {
-                                                                                             "production":  {
-                                                                                                                "buildTarget":  "frontend:build:production"
-                                                                                                            },
-                                                                                             "development":  {
-                                                                                                                 "buildTarget":  "frontend:build:development"
-                                                                                                             }
-                                                                                         },
-                                                                      "defaultConfiguration":  "development",
-                                                                      "options":  {
-                                                                                      "proxyConfig":  "proxy.conf.json"
-                                                                                  }
-                                                                  },
-                                                        "test":  {
-                                                                     "builder":  "@angular/build:unit-test"
-                                                                 }
-                                                    }
-                                  }
-                 }
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "frontend:build:production"
+            },
+            "development": {
+              "buildTarget": "frontend:build:development"
+            }
+          },
+          "defaultConfiguration": "development",
+          "options": {
+            "proxyConfig": "proxy.conf.json"
+          }
+        },
+        "test": {
+          "builder": "@angular/build:unit-test"
+        }
+      }
+    }
+  }
 }
