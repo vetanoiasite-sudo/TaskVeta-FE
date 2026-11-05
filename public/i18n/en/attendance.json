@@ -14,6 +14,7 @@
       "qrHint": "You can also scan the QR code shown on the screen at the entrance with your phone camera."
     },
     "my": {
+      "notLinked": "Your account is not linked to an employee profile, so there is no personal attendance to show. Ask HR to link your user to an employee in Users.",
       "title": "My Attendance", "subtitle": "Record your arrival and departure and review your history",
       "schedule": "Working hours {{start}} – {{end}}", "holiday": "Today is a holiday: {{name}}", "onLeave": "You are on approved leave today.",
       "weekend": "Today is not a working day.", "lateBy": "Late by {{m}}", "notYet": "You have not checked in today.",

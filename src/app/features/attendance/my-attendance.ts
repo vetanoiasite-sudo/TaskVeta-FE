@@ -10,6 +10,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTableModule } from '@angular/material/table';
 import { ApiService } from '../../core/api.service';
+import { AuthService } from '../../core/auth.service';
 import { LocalDatePipe, WallTimePipe, addDays, isoDate, minutesToText, shortTime, startOfMonth } from '../../core/format';
 import { problemMessage } from '../../core/http';
 import { I18nService, TranslatePipe } from '../../core/i18n.service';
@@ -26,8 +27,14 @@ import { GeoError } from './geo';
     MatTableModule, MatPaginatorModule, FormsModule, ReactiveFormsModule, TranslatePipe, LocalDatePipe, WallTimePipe],
   template: `
     <app-page-header [title]="'attendance.my.title' | t" [subtitle]="'attendance.my.subtitle' | t" icon="fingerprint">
-      <button mat-stroked-button (click)="loadStatus()"><mat-icon>refresh</mat-icon>{{ 'common.refresh' | t }}</button>
+      @if (linked) { <button mat-stroked-button (click)="loadStatus()"><mat-icon>refresh</mat-icon>{{ 'common.refresh' | t }}</button> }
     </app-page-header>
+
+    @if (!linked) {
+      <div class="card not-linked">
+        <app-empty-state icon="badge" [message]="'attendance.my.notLinked' | t" />
+      </div>
+    } @else {
 
     @if (status(); as s) {
       <div class="today card">
@@ -147,6 +154,7 @@ import { GeoError } from './geo';
       @if (!loadingHistory() && history().length === 0) { <app-empty-state icon="event_note" [message]="'common.noData' | t" /> }
       <mat-paginator [length]="total()" [pageIndex]="page() - 1" [pageSize]="pageSize()" [pageSizeOptions]="[10, 20, 50]" (page)="onPage($event)" />
     </div>
+    }
   `,
   styles: `
     .today { display: grid; grid-template-columns: 240px 1fr; gap: 24px; margin-bottom: 24px; }
@@ -164,6 +172,7 @@ import { GeoError } from './geo';
     .verify { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; .chip mat-icon { font-size: 15px; width: 15px; height: 15px; } }
     .hint { display: flex; align-items: center; gap: 8px; margin: 0; color: var(--text-muted); font-size: 13px; }
     .shifts { display: flex; gap: 8px; flex-wrap: wrap; }
+    .not-linked { margin-bottom: 24px; }
     .section { margin: 8px 0 12px; font-size: 16px; }
     @media (max-width: 800px) { .today { grid-template-columns: 1fr; } .today__clock { border: none; padding: 0; } }
   `,
@@ -172,6 +181,8 @@ export class MyAttendanceComponent {
   private readonly api = inject(ApiService);
   private readonly i18n = inject(I18nService);
   private readonly toast = inject(ToastService);
+  /** Accounts without an employee profile (e.g. a pure Super Admin) have no personal attendance. */
+  readonly linked = inject(AuthService).user()?.employeeId != null;
 
   readonly status = signal<MyAttendanceStatus | null>(null);
   readonly busy = signal<CheckKind | null>(null);
@@ -205,6 +216,7 @@ export class MyAttendanceComponent {
   constructor() {
     const timer = setInterval(() => this.now.set(new Date()), 1000);
     inject(DestroyRef).onDestroy(() => clearInterval(timer));
+    if (!this.linked) return;
     this.loadStatus();
     this.loadHistory();
     this.loadMonth();
@@ -212,7 +224,6 @@ export class MyAttendanceComponent {
 
 
   loadStatus(): void {
-    // Accounts without an employee profile (e.g. a pure Super Admin) get 400 — handled by the global toast.
     this.api.myAttendanceStatus().subscribe({ next: s => this.status.set(s), error: () => this.status.set(null) });
   }
 
