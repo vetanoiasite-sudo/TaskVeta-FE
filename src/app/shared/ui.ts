@@ -208,7 +208,8 @@ export class AvatarComponent {
   readonly color = computed(() => {
     let h = 0;
     for (const c of this.name() ?? '') h = (h * 31 + c.charCodeAt(0)) % 360;
-    return `hsl(${h} 55% 45%)`;
+    // Warm earthy tones (browns, ochres) that sit with the brand palette.
+    return `hsl(${10 + (h % 45)} ${35 + (h % 4) * 8}% ${30 + (h % 3) * 7}%)`;
   });
 }
 

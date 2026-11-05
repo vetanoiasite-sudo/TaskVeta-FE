@@ -148,9 +148,9 @@ export class DepartmentDialogComponent {
     .dept-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
     .dept { display: flex; flex-direction: column; gap: 10px; &.inactive { opacity: .65; } }
     .dept__head { display: flex; align-items: center; gap: 12px; }
-    .dept__icon { width: 42px; height: 42px; border-radius: 12px; background: #dbeafe; color: var(--primary); display: grid; place-items: center; flex: none; }
+    .dept__icon { width: 42px; height: 42px; border-radius: 12px; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; flex: none; }
     .dept__title { flex: 1; min-width: 0; display: flex; flex-direction: column; strong { font-size: 15.5px; } span { font-size: 12.5px; } }
-    .dept__desc { margin: 0; font-size: 13px; color: #475569; }
+    .dept__desc { margin: 0; font-size: 13px; color: var(--text-muted); }
     .dept__meta div { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-muted);
       mat-icon { font-size: 18px; width: 18px; height: 18px; } }
     .dept__stats { display: flex; align-items: center; gap: 4px; border-top: 1px solid var(--border); padding-top: 8px; }

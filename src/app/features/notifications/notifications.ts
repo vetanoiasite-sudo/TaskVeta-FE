@@ -61,9 +61,9 @@ const ICONS: Record<string, string> = {
   `,
   styles: `
     .notif { display: flex; gap: 14px; padding: 14px 18px; border-bottom: 1px solid var(--border); cursor: pointer; align-items: flex-start;
-      &:hover { background: var(--surface-2); } &.unread { background: #eff6ff; } }
-    .notif__icon { width: 40px; height: 40px; border-radius: 12px; background: #e0e7ff; color: #4338ca; display: grid; place-items: center; flex: none; }
-    .notif__body { flex: 1; min-width: 0; p { margin: 3px 0; color: #334155; font-size: 13.5px; } }
+      &:hover { background: var(--surface-2); } &.unread { background: var(--primary-soft); } }
+    .notif__icon { width: 40px; height: 40px; border-radius: 12px; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; flex: none; }
+    .notif__body { flex: 1; min-width: 0; p { margin: 3px 0; color: var(--text); font-size: 13.5px; } }
     .notif__top { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
     .notif__type { font-size: 11px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 999px; padding: 1px 8px; color: var(--text-muted); }
     .notif__time { font-size: 12px; color: var(--text-muted); }

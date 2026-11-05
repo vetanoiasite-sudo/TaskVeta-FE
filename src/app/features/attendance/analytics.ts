@@ -148,7 +148,7 @@ interface Kpi { label: string; value: string; icon: string; tone: Tone; hint: st
     .mt { margin-top: 16px; }
     .section { margin: 24px 0 12px; font-size: 16px; }
     .perf { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); &:last-child { border: none; } }
-    .rank { width: 26px; height: 26px; border-radius: 50%; background: #dbeafe; color: var(--primary); display: grid; place-items: center; font-weight: 700; font-size: 12px; }
+    .rank { width: 26px; height: 26px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; font-weight: 700; font-size: 12px; }
     .perf__name { flex: 1; display: flex; flex-direction: column; font-weight: 600; small { font-weight: 400; color: var(--text-muted); } }
     .perf__score { font-weight: 700; font-size: 16px; &.good { color: var(--success); } &.bad { color: var(--danger); } }
     td.bad { color: var(--danger); font-weight: 600; }
@@ -205,19 +205,19 @@ export class AnalyticsComponent {
   readonly trendSets = computed(() => {
     const t = this.report()?.trend ?? [];
     return [
-      { label: this.i18n.t('attendance.analytics.present'), data: t.map(p => p.present), color: '#16a34a', fill: true },
-      { label: this.i18n.t('attendance.analytics.late'), data: t.map(p => p.late), color: '#d97706' },
-      { label: this.i18n.t('attendance.analytics.absent'), data: t.map(p => p.absent), color: '#dc2626' },
-      { label: this.i18n.t('dashboard.onLeave'), data: t.map(p => p.onLeave), color: '#0891b2' },
+      { label: this.i18n.t('attendance.analytics.present'), data: t.map(p => p.present), color: '#117c57', fill: true },
+      { label: this.i18n.t('attendance.analytics.late'), data: t.map(p => p.late), color: '#a8740f' },
+      { label: this.i18n.t('attendance.analytics.absent'), data: t.map(p => p.absent), color: '#c8102e' },
+      { label: this.i18n.t('dashboard.onLeave'), data: t.map(p => p.onLeave), color: '#2f5f7d' },
     ];
   });
   readonly deptLabels = computed(() => (this.report()?.byDepartment ?? []).map(d => d.departmentName));
   readonly deptSets = computed(() => {
     const d = this.report()?.byDepartment ?? [];
     return [
-      { label: this.i18n.t('dashboard.attendanceRate') + ' %', data: d.map(x => x.attendanceRate), color: '#2563eb' },
-      { label: this.i18n.t('attendance.analytics.absent'), data: d.map(x => x.absentDays), color: '#dc2626' },
-      { label: this.i18n.t('attendance.analytics.late'), data: d.map(x => x.lateDays), color: '#d97706' },
+      { label: this.i18n.t('dashboard.attendanceRate') + ' %', data: d.map(x => x.attendanceRate), color: '#743014' },
+      { label: this.i18n.t('attendance.analytics.absent'), data: d.map(x => x.absentDays), color: '#c8102e' },
+      { label: this.i18n.t('attendance.analytics.late'), data: d.map(x => x.lateDays), color: '#a8740f' },
     ];
   });
   readonly top = computed(() => this.performance().slice(0, 5));

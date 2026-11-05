@@ -51,7 +51,7 @@ export function statusAction(from: TaskStatus, to: TaskStatus): StatusAction {
     .stack { display: inline-flex; align-items: center; }
     .stack > * { margin-inline-start: -8px; border: 2px solid var(--surface); border-radius: 50%; }
     .stack > *:first-child { margin-inline-start: 0; }
-    .more { display: inline-grid; place-items: center; background: #e2e8f0; color: #475569; font-size: 11px; font-weight: 600; padding: 0 4px; box-sizing: border-box; }
+    .more { display: inline-grid; place-items: center; background: var(--neutral-soft); color: var(--text-muted); font-size: 11px; font-weight: 600; padding: 0 4px; box-sizing: border-box; }
   `,
 })
 export class AssigneeStackComponent {

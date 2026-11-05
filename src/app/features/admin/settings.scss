@@ -8,10 +8,10 @@
 .methods { align-items: start; }
 .method {
   display: flex; flex-direction: column; gap: 12px; border-width: 2px; transition: border-color 0.15s;
-  &.on { border-color: #93c5fd; }
+  &.on { border-color: var(--border-strong); }
   &__head { display: flex; align-items: flex-start; gap: 12px;
     > div:nth-child(2) { flex: 1; display: flex; flex-direction: column; gap: 2px; span { font-size: 12.5px; } } }
-  &__icon { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; flex: none; background: #e0e7ff; color: #4338ca; }
+  &__icon { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; flex: none; background: var(--primary-soft); color: var(--primary); }
   .form-grid { grid-template-columns: 1fr 1fr; }
   p { margin: 0; }
 }

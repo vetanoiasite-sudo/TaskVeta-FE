@@ -302,10 +302,10 @@ export class ResetPasswordDialogComponent {
   styles: `
     .tab-body { padding-top: 16px; }
     .person { display: flex; align-items: center; gap: 10px; }
-    .role-chip { margin-inline-end: 4px; margin-block: 2px; --tone: #334155; --tone-bg: #e2e8f0; }
-    .role-SuperAdmin { --tone: #7c3aed; --tone-bg: #ede9fe; }
-    .role-Admin { --tone: #2563eb; --tone-bg: #dbeafe; }
-    .role-Manager { --tone: #0891b2; --tone-bg: #cffafe; }
+    .role-chip { margin-inline-end: 4px; margin-block: 2px; --tone: var(--neutral); --tone-bg: var(--neutral-soft); }
+    .role-SuperAdmin { --tone: var(--primary); --tone-bg: var(--primary-soft); }
+    .role-Admin { --tone: var(--accent); --tone-bg: var(--accent-soft); }
+    .role-Manager { --tone: var(--info); --tone-bg: var(--info-soft); }
     .locked { margin-inline-start: 6px; mat-icon { font-size: 14px; width: 14px; height: 14px; } }
     .role-desc { margin-top: -6px; font-size: 13px; }
     .perms { display: flex; flex-wrap: wrap; gap: 6px 14px; }

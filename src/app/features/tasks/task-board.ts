@@ -19,7 +19,7 @@ import { ConfirmService, LoadingBarComponent, PageHeaderComponent, StatusChipCom
 import { AssigneeStackComponent, statusAction } from './task-shared';
 
 const COLUMN_TONE: Record<TaskStatus, string> = {
-  New: '#64748b', Assigned: '#0891b2', InProgress: '#2563eb', PendingReview: '#7c3aed', Completed: '#16a34a', Rejected: '#dc2626', Cancelled: '#94a3b8',
+  New: '#6b5442', Assigned: '#2f5f7d', InProgress: '#743014', PendingReview: '#a8740f', Completed: '#117c57', Rejected: '#c8102e', Cancelled: '#b5a58a',
 };
 
 @Component({
@@ -97,12 +97,12 @@ const COLUMN_TONE: Record<TaskStatus, string> = {
   `,
   styles: `
     .board { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 12px; align-items: flex-start; min-height: 60vh; }
-    .column { flex: 0 0 290px; background: #eef2f7; border-radius: 14px; display: flex; flex-direction: column; max-height: calc(100vh - 260px); }
+    .column { flex: 0 0 290px; background: var(--surface-2); border-radius: 14px; display: flex; flex-direction: column; max-height: calc(100vh - 260px); }
     .column__head { display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-top: 3px solid var(--col); border-radius: 14px 14px 0 0;
       strong { font-size: 14px; } .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--col); }
-      .count { margin-inline-start: auto; background: #fff; border-radius: 999px; padding: 0 9px; font-size: 12px; font-weight: 600; color: #475569; } }
+      .count { margin-inline-start: auto; background: #fff; border-radius: 999px; padding: 0 9px; font-size: 12px; font-weight: 600; color: var(--text-muted); } }
     .column__list { padding: 4px 10px 12px; overflow-y: auto; flex: 1; min-height: 80px; display: flex; flex-direction: column; gap: 10px; }
-    .column__empty { text-align: center; color: var(--text-muted); font-size: 12.5px; padding: 18px 0; border: 1.5px dashed #cbd5e1; border-radius: 10px; }
+    .column__empty { text-align: center; color: var(--text-muted); font-size: 12.5px; padding: 18px 0; border: 1.5px dashed var(--border-strong); border-radius: 10px; }
     .task-card { background: var(--surface); border-radius: 12px; padding: 12px; box-shadow: var(--shadow); cursor: grab; border: 1px solid var(--border);
       border-inline-start: 3px solid var(--col);
       h4 { margin: 8px 0; font-size: 14px; line-height: 1.35; word-break: break-word; }
@@ -114,7 +114,7 @@ const COLUMN_TONE: Record<TaskStatus, string> = {
     .overdue-badge { color: var(--danger); font-size: 11.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 2px; }
     .due { display: inline-flex; align-items: center; gap: 3px; &.late { color: var(--danger); font-weight: 600; } }
     .meta { display: inline-flex; gap: 8px; margin-inline-start: auto; span { display: inline-flex; align-items: center; gap: 2px; } }
-    .drag-placeholder { min-height: 70px; border: 2px dashed #94a3b8; border-radius: 12px; background: #e2e8f0; }
+    .drag-placeholder { min-height: 70px; border: 2px dashed var(--border-strong); border-radius: 12px; background: var(--neutral-soft); }
     .cdk-drag-preview { box-shadow: var(--shadow-lg); border-radius: 12px; }
     .cdk-drag-animating, .column__list.cdk-drop-list-dragging .task-card:not(.cdk-drag-placeholder) { transition: transform 200ms cubic-bezier(0, 0, .2, 1); }
   `,

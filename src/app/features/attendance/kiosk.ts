@@ -49,11 +49,11 @@ import { QrCode } from '../../core/models';
     </div>
   `,
   styles: `
-    .kiosk { min-height: 100vh; display: flex; flex-direction: column; color: #e2e8f0;
-      background: radial-gradient(circle at 30% 10%, #1e3a8a 0, #0f172a 65%); }
+    .kiosk { min-height: 100vh; display: flex; flex-direction: column; color: #f0dfbf;
+      background: radial-gradient(circle at 30% 10%, #5a3a22 0, #2e1e12 65%); }
     header { display: flex; justify-content: space-between; align-items: center; padding: 18px 28px;
-      button, a { color: #cbd5e1; } }
-    .brand { display: flex; align-items: center; gap: 10px; font-size: 20px; mat-icon { color: #93c5fd; } }
+      button, a { color: var(--highlight); } }
+    .brand { display: flex; align-items: center; gap: 10px; font-size: 20px; mat-icon { color: var(--highlight); } }
     main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; padding: 16px; }
     .clock { display: flex; flex-direction: column; align-items: center; .time { font-size: 64px; font-weight: 700; font-variant-numeric: tabular-nums; }
       .date { opacity: .75; font-size: 18px; } }
@@ -61,9 +61,9 @@ import { QrCode } from '../../core/models';
       align-items: center; gap: 14px; box-shadow: 0 30px 80px rgba(0,0,0,.35); text-align: center; max-width: 92vw;
       h2 { margin: 0; } img { width: min(420px, 70vw); height: auto; image-rendering: pixelated; } p { margin: 0; color: var(--text-muted); } }
     .warn { font-size: 64px; width: 64px; height: 64px; color: var(--warning); }
-    .countdown { width: 100%; height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
-    .countdown__fill { height: 100%; background: linear-gradient(90deg, #22c55e, #3b82f6); transition: width 1s linear; }
-    .offline { display: flex; gap: 8px; align-items: center; color: #fca5a5; }
+    .countdown { width: 100%; height: 8px; background: var(--neutral-soft); border-radius: 999px; overflow: hidden; }
+    .countdown__fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--primary)); transition: width 1s linear; }
+    .offline { display: flex; gap: 8px; align-items: center; color: #f4a6b2; }
   `,
 })
 export class KioskComponent {

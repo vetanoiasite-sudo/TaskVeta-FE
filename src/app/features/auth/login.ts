@@ -61,15 +61,15 @@ import { I18nService, TranslatePipe } from '../../core/i18n.service';
   styles: `
     .login { display: grid; grid-template-columns: 1.1fr 1fr; min-height: 100vh; }
     .login__hero {
-      background: radial-gradient(circle at 20% 20%, #1e40af 0, #0f172a 60%); color: #e2e8f0;
+      background: radial-gradient(circle at 20% 20%, #5a3a22 0, #2e1e12 62%); color: #f0dfbf;
       padding: 64px; display: flex; flex-direction: column; justify-content: center; gap: 12px;
-      h1 { font-size: 34px; margin: 12px 0 0; color: #fff; }
+      h1 { font-size: 34px; margin: 12px 0 0; color: var(--highlight); }
       p { max-width: 460px; opacity: .8; line-height: 1.6; }
       ul { list-style: none; padding: 0; margin: 20px 0 0; display: grid; gap: 14px; }
-      li { display: flex; align-items: center; gap: 12px; font-size: 15px; mat-icon { color: #93c5fd; } }
+      li { display: flex; align-items: center; gap: 12px; font-size: 15px; mat-icon { color: var(--highlight); } }
     }
     .login__brand { width: 56px; height: 56px; border-radius: 16px; display: grid; place-items: center;
-      background: linear-gradient(135deg, #3b82f6, #6366f1); mat-icon { color: #fff; font-size: 30px; width: 30px; height: 30px; } }
+      background: var(--highlight); mat-icon { color: var(--ink-deep); font-size: 30px; width: 30px; height: 30px; } }
     .login__panel { display: grid; place-items: center; padding: 32px; position: relative; background: var(--app-bg); }
     .login__lang { position: absolute; top: 20px; inset-inline-end: 20px; }
     .login__card { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 4px;

@@ -10,7 +10,7 @@
 .act mat-icon { margin-inline-end: 4px; }
 .act-success:not(:disabled) { background: var(--success) !important; color: #fff !important; }
 .act-danger:not(:disabled) { background: var(--danger) !important; color: #fff !important; }
-.act-neutral:not(:disabled) { background: #475569 !important; color: #fff !important; }
+.act-neutral:not(:disabled) { background: var(--neutral) !important; color: #fff !important; }
 
 .layout { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; align-items: start; }
 .main, .side { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
@@ -24,7 +24,7 @@
 .tab-body { padding: 16px 20px; }
 
 .comment { display: flex; gap: 10px; margin-bottom: 14px; align-items: flex-start;
-  &.mine .comment__bubble { background: #eff6ff; border-color: #bfdbfe; } }
+  &.mine .comment__bubble { background: var(--primary-soft); border-color: var(--border-strong); } }
 .comment__bubble { flex: 1; min-width: 0; background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px;
   p { margin: 4px 0 0; white-space: pre-wrap; word-break: break-word; line-height: 1.5; } }
 .comment__meta { display: flex; gap: 10px; align-items: baseline; span { font-size: 12px; color: var(--text-muted); } }
@@ -42,7 +42,7 @@
 .timeline { list-style: none; margin: 0; padding: 0; position: relative;
   li { display: flex; gap: 12px; position: relative; padding-bottom: 18px; }
   li:not(:last-child)::before { content: ''; position: absolute; inset-inline-start: 15px; top: 32px; bottom: 0; width: 2px; background: var(--border); } }
-.timeline__dot { width: 32px; height: 32px; border-radius: 50%; background: #e0e7ff; color: #4338ca; display: grid; place-items: center; flex: none;
+.timeline__dot { width: 32px; height: 32px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; flex: none;
   mat-icon { font-size: 17px; width: 17px; height: 17px; } }
 .timeline__body { flex: 1; min-width: 0; p { margin: 4px 0; font-size: 13.5px; word-break: break-word; } }
 .transition { display: inline-flex; align-items: center; gap: 4px; .arrow { font-size: 16px; width: 16px; height: 16px; color: var(--text-muted); } }
