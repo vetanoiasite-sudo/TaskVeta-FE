@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, computed, inject, signal } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { AbstractControl, FormBuilder, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -11,8 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { ApiService } from '../../core/api.service';
 import { I18nService, TranslatePipe } from '../../core/i18n.service';
-import { LookupService } from '../../core/lookup.service';
-import { SaveTask, TASK_PRIORITIES, TaskDetails, TaskPriority } from '../../core/models';
+import { Lookup, SaveTask, TaskTargets, TASK_PRIORITIES, TaskDetails, TaskPriority } from '../../core/models';
 import { ToastService } from '../../core/toast.service';
 import { validationErrors } from '../../core/http';
 import { combineDateTime, timeOf } from './task-shared';
@@ -51,17 +50,25 @@ function dueAfterStart(group: AbstractControl): ValidationErrors | null {
           </mat-form-field>
 
           <mat-form-field>
-            <mat-label>{{ 'tasks.fields.priority' | t }}</mat-label>
-            <mat-select formControlName="priority">
-              @for (p of priorities; track p) { <mat-option [value]="p">{{ 'enums.status.' + p | t }}</mat-option> }
+            <mat-label>{{ 'common.department' | t }} ({{ 'common.optional' | t }})</mat-label>
+            <mat-select formControlName="departmentId">
+              <mat-option [value]="null">{{ 'tasks.form.autoDepartment' | t }}</mat-option>
+              @for (d of departments(); track d.id) { <mat-option [value]="d.id">{{ label(d) }}</mat-option> }
             </mat-select>
           </mat-form-field>
 
           <mat-form-field>
-            <mat-label>{{ 'common.department' | t }} ({{ 'common.optional' | t }})</mat-label>
-            <mat-select formControlName="departmentId">
-              <mat-option [value]="null">{{ 'tasks.form.autoDepartment' | t }}</mat-option>
-              @for (d of departments(); track d.id) { <mat-option [value]="d.id">{{ d.name }}</mat-option> }
+            <mat-label>{{ 'common.team' | t }} ({{ 'common.optional' | t }})</mat-label>
+            <mat-select formControlName="teamId">
+              <mat-option [value]="null">{{ 'tasks.form.noTeam' | t }}</mat-option>
+              @for (tm of teams(); track tm.id) { <mat-option [value]="tm.id">{{ label(tm) }}</mat-option> }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="span-2">
+            <mat-label>{{ 'tasks.fields.priority' | t }}</mat-label>
+            <mat-select formControlName="priority">
+              @for (p of priorities; track p) { <mat-option [value]="p">{{ 'enums.status.' + p | t }}</mat-option> }
             </mat-select>
           </mat-form-field>
 
@@ -99,9 +106,11 @@ function dueAfterStart(group: AbstractControl): ValidationErrors | null {
               </div>
               @for (e of employees(); track e.id) {
                 <mat-option [value]="e.id" [class.hidden]="!matches(e.name, e.code)">{{ e.name }} <span class="muted">· {{ e.code }}</span></mat-option>
+              } @empty {
+                <mat-option disabled>{{ 'tasks.form.noEmployees' | t }}</mat-option>
               }
             </mat-select>
-            <mat-hint>{{ 'tasks.form.assigneesHint' | t }}</mat-hint>
+            <mat-hint>{{ (filtered() ? 'tasks.form.filteredHint' : 'tasks.form.assigneesHint') | t }}</mat-hint>
           </mat-form-field>
         </div>
       </mat-dialog-content>
@@ -122,7 +131,6 @@ function dueAfterStart(group: AbstractControl): ValidationErrors | null {
 })
 export class TaskFormDialogComponent {
   private readonly api = inject(ApiService);
-  private readonly lookups = inject(LookupService);
   private readonly toast = inject(ToastService);
   private readonly i18n = inject(I18nService);
   private readonly ref = inject(MatDialogRef<TaskFormDialogComponent, TaskDetails>);
@@ -133,17 +141,9 @@ export class TaskFormDialogComponent {
   readonly saving = signal(false);
   readonly serverErrors = signal<Record<string, string[]>>({});
   readonly assigneeSearch = signal('');
-  readonly departments = toSignal(this.lookups.departments(), { initialValue: [] });
-  private readonly allEmployees = toSignal(this.lookups.employees(), { initialValue: [] });
-
-  /** Keeps currently assigned people selectable even if they are outside the lookup scope. */
-  readonly employees = computed(() => {
-    const list = [...this.allEmployees()];
-    for (const a of this.data.task?.task.assignees ?? []) {
-      if (!list.some(e => e.id === a.employeeId)) list.push({ id: a.employeeId, name: a.fullName, code: a.employeeCode });
-    }
-    return list;
-  });
+  /** Departments, teams and employees this user may give tasks to (scoped by the server). */
+  private readonly targets = toSignal(this.api.taskTargets(), { initialValue: { departments: [], teams: [], employees: [] } as TaskTargets });
+  readonly departments = computed(() => this.targets().departments);
 
   readonly form = (() => {
     const t = this.data.task;
@@ -152,6 +152,7 @@ export class TaskFormDialogComponent {
       description: [t?.description ?? '', [Validators.maxLength(4000)]],
       priority: [(t?.task.priority ?? 'Medium') as TaskPriority],
       departmentId: [t?.task.departmentId ?? (null as number | null)],
+      teamId: [t?.task.teamId ?? (null as number | null)],
       startDate: [t?.task.startDate ? new Date(t.task.startDate) : (null as Date | null)],
       startTime: [t?.task.startDate ? timeOf(t.task.startDate) : '09:00'],
       dueDate: [t?.task.dueDate ? new Date(t.task.dueDate) : (null as Date | null)],
@@ -159,6 +160,56 @@ export class TaskFormDialogComponent {
       assigneeEmployeeIds: [t?.task.assignees.map(a => a.employeeId) ?? ([] as number[])],
     }, { validators: dueAfterStart });
   })();
+
+  private readonly departmentId = toSignal(this.form.controls.departmentId.valueChanges, { initialValue: this.form.controls.departmentId.value });
+  private readonly teamId = toSignal(this.form.controls.teamId.valueChanges, { initialValue: this.form.controls.teamId.value });
+
+  /** Teams of the selected department (or all allowed teams when no department is chosen). */
+  readonly teams = computed(() => {
+    const d = this.departmentId();
+    return this.targets().teams.filter(tm => d == null || tm.departmentId === d);
+  });
+
+  readonly filtered = computed(() => this.teamId() != null || this.departmentId() != null);
+
+  /** Employees of the selected team, else of the selected department, else everyone allowed. Current assignees stay listed. */
+  readonly employees = computed(() => {
+    const team = this.teamId(), dept = this.departmentId();
+    const list: Lookup[] = this.targets().employees
+      .filter(e => team != null ? e.teamIds.includes(team) : dept == null || e.departmentId === dept)
+      .map(e => ({ id: e.id, name: e.name, code: e.code }));
+    for (const a of this.data.task?.task.assignees ?? []) {
+      if (!list.some(e => e.id === a.employeeId)) list.push({ id: a.employeeId, name: a.fullName, code: a.employeeCode });
+    }
+    return list;
+  });
+
+  constructor() {
+    const c = this.form.controls;
+    // A team belongs to one department: picking it selects that department; changing the department clears a foreign team.
+    c.teamId.valueChanges.pipe(takeUntilDestroyed()).subscribe(id => {
+      const team = this.targets().teams.find(tm => tm.id === id);
+      if (team && c.departmentId.value !== team.departmentId) c.departmentId.setValue(team.departmentId);
+      this.dropHiddenAssignees();
+    });
+    c.departmentId.valueChanges.pipe(takeUntilDestroyed()).subscribe(id => {
+      const team = this.targets().teams.find(tm => tm.id === c.teamId.value);
+      if (team && id !== team.departmentId) c.teamId.setValue(null);
+      this.dropHiddenAssignees();
+    });
+  }
+
+  /** Removes selected assignees that are no longer in the filtered list (after the user changes department/team). */
+  private dropHiddenAssignees(): void {
+    const visible = new Set(this.employees().map(e => e.id));
+    const c = this.form.controls.assigneeEmployeeIds;
+    const kept = c.value.filter(id => visible.has(id));
+    if (kept.length !== c.value.length) c.setValue(kept);
+  }
+
+  label(x: { name: string; nameAr: string | null }): string {
+    return this.i18n.lang() === 'ar' && x.nameAr ? x.nameAr : x.name;
+  }
 
   matches(name: string, code?: string | null): boolean {
     const q = this.assigneeSearch().trim().toLowerCase();
@@ -171,7 +222,7 @@ export class TaskFormDialogComponent {
     const body: SaveTask = {
       title: v.title.trim(), description: v.description.trim() || null, priority: v.priority,
       startDate: combineDateTime(v.startDate, v.startTime), dueDate: combineDateTime(v.dueDate, v.dueTime),
-      departmentId: v.departmentId, assigneeEmployeeIds: v.assigneeEmployeeIds, rowVersion: this.data.task?.rowVersion ?? null,
+      departmentId: v.departmentId, teamId: v.teamId, assigneeEmployeeIds: v.assigneeEmployeeIds, rowVersion: this.data.task?.rowVersion ?? null,
     };
     this.saving.set(true);
     this.serverErrors.set({});

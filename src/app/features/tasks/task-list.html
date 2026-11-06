@@ -122,6 +122,7 @@
             <span class="cell-strong title-cell">{{ t.title }}</span>
             <span class="cell-sub">
               @if (t.departmentName) { {{ t.departmentName }} · }
+              @if (t.teamName) { {{ t.teamName }} · }
               {{ 'tasks.fields.assignedBy' | t }}: {{ t.assignedByName }}
               @if (t.commentCount) { · <mat-icon class="inline">chat_bubble_outline</mat-icon>{{ t.commentCount }} }
               @if (t.attachmentCount) { · <mat-icon class="inline">attach_file</mat-icon>{{ t.attachmentCount }} }

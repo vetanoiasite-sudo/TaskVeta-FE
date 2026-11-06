@@ -6,7 +6,7 @@ import {
   CheckRequest, CorrectAttendance, CreateEmployee, CreateManualAttendance, DailyAttendance, DailyQuery, DailySummary, Dashboard,
   Department, Employee, EmployeePerformance, EmployeeQuery, Holiday, LeaveQuery, LeaveRequest, LeaveType, Lookup,
   MyAttendanceStatus, PagedResult, PageQuery, PublicSettings, QrCode, RegisterUser, ReportQuery, Role, SaveDepartment, SaveHoliday,
-  SaveTask, SaveTeam, SaveWorkSchedule, Settings, TaskComment, TaskAttachment, TaskDashboard, TaskDetails, TaskHistory, TaskItem,
+  SaveTask, TaskTargets, SaveTeam, SaveWorkSchedule, Settings, TaskComment, TaskAttachment, TaskDashboard, TaskDetails, TaskHistory, TaskItem,
   TaskQuery, TaskReport, TaskStatus, TeamDetails, Team, TimeZoneItem, UpdateEmployee, UpdateUser, User, WorkSchedule, CurrentUser,
 } from './models';
 
@@ -131,6 +131,7 @@ export class ApiService {
   myTasks(q: TaskQuery) { return this.http.get<PagedResult<TaskItem>>(`${this.base}/tasks/my-tasks`, { params: toParams(q) }); }
   taskDashboard(mine = false) { return this.http.get<TaskDashboard>(`${this.base}/tasks/dashboard`, { params: toParams({ mine }) }); }
   task(id: number) { return this.http.get<TaskDetails>(`${this.base}/tasks/${id}`); }
+  taskTargets() { return this.http.get<TaskTargets>(`${this.base}/tasks/targets`); }
   createTask(body: SaveTask) { return this.http.post<TaskDetails>(`${this.base}/tasks`, body); }
   updateTask(id: number, body: SaveTask) { return this.http.put<TaskDetails>(`${this.base}/tasks/${id}`, body); }
   deleteTask(id: number) { return this.http.delete<void>(`${this.base}/tasks/${id}`); }

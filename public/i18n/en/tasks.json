@@ -16,7 +16,8 @@
       "progress": "Progress", "completionDate": "Completed on"
     },
     "form": {
-      "createTitle": "Create task", "editTitle": "Edit task", "autoDepartment": "Automatic (from first assignee)",
+      "createTitle": "Create task", "editTitle": "Edit task", "autoDepartment": "Automatic (from first assignee)", "noTeam": "No team",
+      "filteredHint": "Only employees of the selected department / team are listed.", "noEmployees": "No employees in this department / team.",
       "dueBeforeStart": "The due date must be after the start date.",
       "assigneesHint": "Select one or more employees. The first one is the primary assignee."
     },

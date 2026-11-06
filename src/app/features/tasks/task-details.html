@@ -171,6 +171,7 @@
         <dl>
           <dt>{{ 'tasks.fields.assignedBy' | t }}</dt><dd>{{ d.task.assignedByName }}</dd>
           <dt>{{ 'common.department' | t }}</dt><dd>{{ d.task.departmentName ?? '—' }}</dd>
+          @if (d.task.teamName) { <dt>{{ 'common.team' | t }}</dt><dd>{{ d.task.teamName }}</dd> }
           <dt>{{ 'tasks.fields.startDate' | t }}</dt><dd>{{ d.task.startDate | ldate: 'datetime' }}</dd>
           <dt>{{ 'tasks.fields.dueDate' | t }}</dt>
           <dd [class.overdue]="d.task.isOverdue">{{ d.task.dueDate | ldate: 'datetime' }}

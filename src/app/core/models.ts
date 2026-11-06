@@ -207,7 +207,7 @@ export interface TaskAssignee { employeeId: number; employeeCode: string; fullNa
 export interface TaskItem {
   id: number; title: string; priority: TaskPriority; status: TaskStatus; progressPercent: number; startDate: string | null;
   dueDate: string | null; completionDate: string | null; isOverdue: boolean; assignedByUserId: number; assignedByName: string;
-  departmentId: number | null; departmentName: string | null; assignees: TaskAssignee[]; commentCount: number; attachmentCount: number;
+  departmentId: number | null; departmentName: string | null; teamId: number | null; teamName: string | null; assignees: TaskAssignee[]; commentCount: number; attachmentCount: number;
   createdAt: string; updatedAt: string;
 }
 export interface TaskComment { id: number; userId: number; userName: string; content: string; createdAt: string; }
@@ -219,12 +219,18 @@ export interface TaskDetails {
   permissions: TaskPermissions; rowVersion: string;
 }
 export interface TaskQuery extends PageQuery {
-  status?: TaskStatus | null; priority?: TaskPriority | null; assigneeId?: number | null; departmentId?: number | null;
+  status?: TaskStatus | null; priority?: TaskPriority | null; assigneeId?: number | null; departmentId?: number | null; teamId?: number | null;
   overdue?: boolean | null; dueFrom?: string | null; dueTo?: string | null; mine?: boolean; createdByMe?: boolean;
 }
 export interface SaveTask {
   title: string; description: string | null; priority: TaskPriority; startDate: string | null; dueDate: string | null;
-  departmentId: number | null; assigneeEmployeeIds: number[]; rowVersion?: string | null;
+  departmentId: number | null; teamId: number | null; assigneeEmployeeIds: number[]; rowVersion?: string | null;
+}
+/** What the current user may pick in the task form (scoped by the server). */
+export interface TaskTargets {
+  departments: { id: number; name: string; nameAr: string | null }[];
+  teams: { id: number; name: string; nameAr: string | null; departmentId: number }[];
+  employees: { id: number; name: string; code: string; departmentId: number; teamIds: number[] }[];
 }
 export interface TaskDashboard {
   total: number; new: number; assigned: number; inProgress: number; pendingReview: number; completed: number; rejected: number;

@@ -16,7 +16,8 @@
       "progress": "نسبة الإنجاز", "completionDate": "تاريخ الإنجاز"
     },
     "form": {
-      "createTitle": "إنشاء مهمة", "editTitle": "تعديل المهمة", "autoDepartment": "تلقائي (من أول مكلّف)",
+      "createTitle": "إنشاء مهمة", "editTitle": "تعديل المهمة", "autoDepartment": "تلقائي (من أول مكلّف)", "noTeam": "بدون فريق",
+      "filteredHint": "يظهر فقط موظفو القسم / الفريق المختار.", "noEmployees": "لا يوجد موظفون في هذا القسم / الفريق.",
       "dueBeforeStart": "يجب أن يكون تاريخ التسليم بعد تاريخ البدء.",
       "assigneesHint": "اختر موظفاً أو أكثر. الأول هو المكلّف الرئيسي."
     },
