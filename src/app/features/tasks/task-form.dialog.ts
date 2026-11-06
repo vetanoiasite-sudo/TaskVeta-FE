@@ -172,11 +172,16 @@ export class TaskFormDialogComponent {
 
   readonly filtered = computed(() => this.teamId() != null || this.departmentId() != null);
 
-  /** Employees of the selected team, else of the selected department, else everyone allowed. Current assignees stay listed. */
+  /**
+   * Employees of the selected team (members + its leader), else of the selected department (staff + its head), else everyone
+   * allowed. Current assignees stay listed.
+   */
   readonly employees = computed(() => {
-    const team = this.teamId(), dept = this.departmentId();
-    const list: Lookup[] = this.targets().employees
-      .filter(e => team != null ? e.teamIds.includes(team) : dept == null || e.departmentId === dept)
+    const team = this.teamId(), dept = this.departmentId(), t = this.targets();
+    const leader = t.teams.find(x => x.id === team)?.leaderEmployeeId;
+    const head = t.departments.find(x => x.id === dept)?.managerEmployeeId;
+    const list: Lookup[] = t.employees
+      .filter(e => team != null ? e.teamIds.includes(team) || e.id === leader : dept == null || e.departmentId === dept || e.id === head)
       .map(e => ({ id: e.id, name: e.name, code: e.code }));
     for (const a of this.data.task?.task.assignees ?? []) {
       if (!list.some(e => e.id === a.employeeId)) list.push({ id: a.employeeId, name: a.fullName, code: a.employeeCode });

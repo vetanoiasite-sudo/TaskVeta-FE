@@ -228,8 +228,8 @@ export interface SaveTask {
 }
 /** What the current user may pick in the task form (scoped by the server). */
 export interface TaskTargets {
-  departments: { id: number; name: string; nameAr: string | null }[];
-  teams: { id: number; name: string; nameAr: string | null; departmentId: number }[];
+  departments: { id: number; name: string; nameAr: string | null; managerEmployeeId: number | null }[];
+  teams: { id: number; name: string; nameAr: string | null; departmentId: number; leaderEmployeeId: number | null }[];
   employees: { id: number; name: string; code: string; departmentId: number; teamIds: number[] }[];
 }
 export interface TaskDashboard {
