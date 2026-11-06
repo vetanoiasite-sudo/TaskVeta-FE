@@ -66,7 +66,7 @@
       "Pending": "Pending", "Approved": "Approved",
       "true": "Active", "false": "Inactive"
     },
-    "role": { "SuperAdmin": "Super Admin", "Admin": "Admin / HR", "Manager": "Manager", "Employee": "Employee" },
+    "role": { "SuperAdmin": "Super Admin", "Admin": "Admin / HR", "Manager": "Manager", "Employee": "Employee", "Leader": "Department / team lead" },
     "leaveType": { "Annual": "Annual", "Sick": "Sick", "Unpaid": "Unpaid", "Emergency": "Emergency", "Other": "Other" },
     "day": { "Sunday": "Sunday", "Monday": "Monday", "Tuesday": "Tuesday", "Wednesday": "Wednesday", "Thursday": "Thursday", "Friday": "Friday", "Saturday": "Saturday" },
     "notificationType": {

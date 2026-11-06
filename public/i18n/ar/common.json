@@ -66,7 +66,7 @@
       "Pending": "قيد الانتظار", "Approved": "موافق عليها",
       "true": "نشط", "false": "غير نشط"
     },
-    "role": { "SuperAdmin": "مدير النظام", "Admin": "الإدارة / الموارد البشرية", "Manager": "مدير / قائد فريق", "Employee": "موظف" },
+    "role": { "SuperAdmin": "مدير النظام", "Admin": "الإدارة / الموارد البشرية", "Manager": "مدير / قائد فريق", "Employee": "موظف", "Leader": "رئيس قسم / فريق" },
     "leaveType": { "Annual": "سنوية", "Sick": "مرضية", "Unpaid": "بدون راتب", "Emergency": "طارئة", "Other": "أخرى" },
     "day": { "Sunday": "الأحد", "Monday": "الإثنين", "Tuesday": "الثلاثاء", "Wednesday": "الأربعاء", "Thursday": "الخميس", "Friday": "الجمعة", "Saturday": "السبت" },
     "notificationType": {
