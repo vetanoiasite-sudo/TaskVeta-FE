@@ -88,6 +88,13 @@
       </mat-select>
     </mat-form-field>
   }
+  <mat-form-field>
+    <mat-label>{{ 'projects.project' | t }}</mat-label>
+    <mat-select [ngModel]="projectId()" (ngModelChange)="projectId.set($event); reload()">
+      <mat-option [value]="null">{{ 'common.all' | t }}</mat-option>
+      @for (p of projects(); track p.id) { <mat-option [value]="p.id">{{ lang() === 'ar' && p.nameAr ? p.nameAr : p.name }}</mat-option> }
+    </mat-select>
+  </mat-form-field>
   <mat-form-field class="wide">
     <mat-label>{{ 'tasks.filters.dueRange' | t }}</mat-label>
     <mat-date-range-input [rangePicker]="rp">
@@ -121,6 +128,7 @@
           <td mat-cell *matCellDef="let t">
             <span class="cell-strong title-cell">{{ t.title }}</span>
             <span class="cell-sub">
+              @if (t.projectName) { <mat-icon class="inline">folder_special</mat-icon>{{ t.projectName }} · }
               @if (t.departmentName) { {{ t.departmentName }} · }
               @if (t.teamName) { {{ t.teamName }} · }
               {{ 'tasks.fields.assignedBy' | t }}: {{ t.assignedByName }}

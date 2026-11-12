@@ -19,6 +19,9 @@
         <app-status-chip [value]="d.task.status" />
         <app-status-chip [value]="d.task.priority" />
         @if (d.task.isOverdue) { <span class="chip tone-danger"><mat-icon class="chip-icon">schedule</mat-icon>{{ 'tasks.overdue' | t }}</span> }
+        @if (d.task.rating !== null) {
+          <span class="chip tone-warning" [matTooltip]="'tasks.review.rating' | t"><mat-icon class="chip-icon">grade</mat-icon>{{ d.task.rating }}/10</span>
+        }
       </div>
       <h1>{{ d.task.title }}</h1>
     </div>
@@ -29,6 +32,13 @@
       }
     </div>
   </div>
+
+  @if (d.task.status === 'PendingReview') {
+    <div class="alert alert-warning">
+      <mat-icon>rate_review</mat-icon>
+      <div>{{ (d.permissions.canReview ? 'tasks.review.awaitingYou' : 'tasks.review.awaiting') | t }}</div>
+    </div>
+  }
 
   @if (actions().length) {
     <div class="action-bar card">
@@ -86,7 +96,21 @@
                   <app-avatar [name]="c.userName" [size]="34" />
                   <div class="comment__bubble">
                     <div class="comment__meta"><strong>{{ c.userName }}</strong><span>{{ c.createdAt | ldate: 'relative' }}</span></div>
-                    <p>{{ c.content }}</p>
+                    <p>@for (part of commentParts(c); track $index) {@if (part.mention) {<span class="mention">{{ part.text }}</span>} @else {<span>{{ part.text }}</span>}}</p>
+                    @if (seenBy(c); as s) {
+                      @if (s.total) {
+                        <!-- per-person read receipts: coloured ✓✓ = opened the task after this comment, grey ✓ = not yet -->
+                        <div class="receipts">
+                          @for (p of s.seen; track p.userId) {
+                            <span class="rcpt seen" [matTooltip]="('tasks.seen.lastOpened' | t) + ': ' + (p.lastSeenAt | ldate: 'datetime')">
+                              <mat-icon>done_all</mat-icon>{{ p.name }}</span>
+                          }
+                          @for (p of s.pending; track p.userId) {
+                            <span class="rcpt" [matTooltip]="'tasks.seen.notSeen' | t"><mat-icon>done</mat-icon>{{ p.name }}</span>
+                          }
+                        </div>
+                      }
+                    }
                   </div>
                 </div>
               } @empty {
@@ -94,12 +118,35 @@
               }
               @if (d.permissions.canComment) {
                 <div class="comment-form">
-                  <mat-form-field class="w-100">
-                    <mat-label>{{ 'tasks.comments.add' | t }}</mat-label>
-                    <textarea matInput rows="2" maxlength="4000" [ngModel]="comment()" (ngModelChange)="comment.set($event)"
-                              (keydown.control.enter)="addComment()"></textarea>
-                    <mat-hint>{{ 'tasks.comments.hint' | t }}</mat-hint>
-                  </mat-form-field>
+                  <div class="mention-host w-100">
+                    <mat-form-field class="w-100">
+                      <mat-label>{{ 'tasks.comments.add' | t }}</mat-label>
+                      <textarea #commentBox matInput rows="2" maxlength="4000" [ngModel]="comment()"
+                                (ngModelChange)="onCommentInput($event, commentBox)" (click)="onCommentInput(comment(), commentBox)"
+                                (keydown)="onCommentKeydown($event)" (keydown.control.enter)="addComment()"
+                                (blur)="closeMentions()"></textarea>
+                      <button mat-icon-button matSuffix type="button" (mousedown)="$event.preventDefault()" (click)="startMention()"
+                              [matTooltip]="'tasks.comments.mention' | t" [attr.aria-label]="'tasks.comments.mention' | t">
+                        <mat-icon>alternate_email</mat-icon>
+                      </button>
+                      <mat-hint>{{ 'tasks.comments.hint' | t }} · {{ 'tasks.comments.mentionHint' | t }}</mat-hint>
+                    </mat-form-field>
+                    @if (mentionQuery() !== null) {
+                      <div class="mention-list" role="listbox">
+                        @for (p of mentionOptions(); track p.userId; let i = $index) {
+                          <button type="button" class="mention-option" role="option" [class.active]="i === mentionIndex()"
+                                  [attr.aria-selected]="i === mentionIndex()"
+                                  (mousedown)="$event.preventDefault(); pickMention(p)" (mouseenter)="mentionIndex.set(i)">
+                            <app-avatar [name]="p.name" [size]="26" />
+                            <span class="mention-option__name">{{ p.name }}</span>
+                            <span class="muted small">{{ 'tasks.roles.' + p.role | t }}</span>
+                          </button>
+                        } @empty {
+                          <div class="mention-empty muted small">{{ 'tasks.comments.noMatches' | t }}</div>
+                        }
+                      </div>
+                    }
+                  </div>
                   <button mat-flat-button (click)="addComment()" [disabled]="!comment().trim() || busy()">
                     <mat-icon>send</mat-icon>{{ 'common.submit' | t }}
                   </button>
@@ -170,6 +217,9 @@
         <h3 class="card__title">{{ 'common.details' | t }}</h3>
         <dl>
           <dt>{{ 'tasks.fields.assignedBy' | t }}</dt><dd>{{ d.task.assignedByName }}</dd>
+          @if (d.task.projectId) {
+            <dt>{{ 'projects.project' | t }}</dt><dd><a [routerLink]="['/projects', d.task.projectId]">{{ d.task.projectName }}</a></dd>
+          }
           <dt>{{ 'common.department' | t }}</dt><dd>{{ d.task.departmentName ?? '—' }}</dd>
           @if (d.task.teamName) { <dt>{{ 'common.team' | t }}</dt><dd>{{ d.task.teamName }}</dd> }
           <dt>{{ 'tasks.fields.startDate' | t }}</dt><dd>{{ d.task.startDate | ldate: 'datetime' }}</dd>
@@ -182,13 +232,40 @@
           <dt>{{ 'common.updatedAt' | t }}</dt><dd>{{ d.task.updatedAt | ldate: 'relative' }}</dd>
         </dl>
       </div>
+      @if (d.reviews.length) {
+        <div class="card">
+          <h3 class="card__title">{{ 'tasks.review.history' | t }} <span class="muted small">{{ d.reviews.length }}</span></h3>
+          @for (r of d.reviews; track r.id) {
+            <div class="review" [class.rejected]="!r.approved">
+              <div class="review__head">
+                <mat-icon>{{ r.approved ? 'task_alt' : 'block' }}</mat-icon>
+                <strong>{{ (r.approved ? 'tasks.reviewReport.approvedOne' : 'tasks.reviewReport.rejectedOne') | t }}</strong>
+                @if (r.rating !== null) { <span class="review__rating"><mat-icon>grade</mat-icon>{{ r.rating }}/10</span> }
+              </div>
+              @if (r.notes) { <p>{{ r.notes }}</p> }
+              <span class="muted small">{{ r.reviewerName }} · {{ r.createdAt | ldate: 'datetime' }}</span>
+            </div>
+          }
+        </div>
+      }
       <div class="card">
         <h3 class="card__title">{{ 'tasks.fields.assignees' | t }} <span class="muted small">{{ d.task.assignees.length }}</span></h3>
         @for (a of d.task.assignees; track a.employeeId; let first = $first) {
           <div class="assignee">
             <app-avatar [name]="a.fullName" [size]="34" />
             <div><strong>{{ a.fullName }}</strong><span class="muted small block">{{ a.employeeCode }}
-              @if (first && d.task.assignees.length > 1) { · {{ 'tasks.details.primary' | t }} }</span></div>
+              @if (first && d.task.assignees.length > 1) { · {{ 'tasks.details.primary' | t }} }</span>
+              @if (participantFor(a.employeeId); as p) {
+                @if (p.firstSeenAt) {
+                  <span class="seen-line seen" [matTooltip]="('tasks.seen.lastOpened' | t) + ': ' + (p.lastSeenAt | ldate: 'datetime')">
+                    <mat-icon>done_all</mat-icon>{{ 'tasks.seen.seen' | t }} · {{ p.firstSeenAt | ldate: 'relative' }}</span>
+                } @else {
+                  <span class="seen-line"><mat-icon>schedule</mat-icon>{{ 'tasks.seen.notSeen' | t }}</span>
+                }
+              } @else {
+                <span class="seen-line muted"><mat-icon>no_accounts</mat-icon>{{ 'tasks.seen.noAccount' | t }}</span>
+              }
+            </div>
           </div>
         } @empty {
           <p class="muted">{{ 'tasks.details.unassigned' | t }}</p>

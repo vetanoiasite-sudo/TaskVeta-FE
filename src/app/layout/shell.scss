@@ -7,6 +7,7 @@
   border: none;
   background: var(--sidebar-bg);
   color: var(--sidebar-fg);
+  border-inline-end: 1px solid var(--sidebar-sep);
   transition: width 0.2s ease;
   &.collapsed { width: 72px; }
 }
@@ -21,27 +22,27 @@
   &__logo {
     width: 40px; height: 40px; border-radius: 12px; flex: none;
     display: grid; place-items: center;
-    background: var(--highlight); color: var(--ink-deep);
+    background: var(--primary); color: #fff;
   }
   &__text { display: flex; flex-direction: column; line-height: 1.2; overflow: hidden;
-    strong { font-size: 15px; color: var(--highlight); white-space: nowrap; }
-    span { font-size: 11.5px; opacity: 0.65; white-space: nowrap; }
+    strong { font-size: 15px; color: var(--primary); white-space: nowrap; }
+    span { font-size: 11.5px; color: var(--sidebar-muted); white-space: nowrap; }
   }
 }
 
 .nav {
   padding: 4px 10px 24px;
-  &__group { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.5; padding: 16px 12px 6px; }
-  &__sep { height: 1px; background: rgb(232 209 167 / 14%); margin: 10px 8px; }
+  &__group { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--sidebar-muted); font-weight: 600; padding: 16px 12px 6px; }
+  &__sep { height: 1px; background: var(--sidebar-sep); margin: 10px 8px; }
   &__item {
     display: flex; align-items: center; gap: 12px;
     padding: 9px 12px; margin: 2px 0; border-radius: 10px;
     color: inherit; text-decoration: none; font-size: 14px;
     transition: background 0.15s;
-    mat-icon { font-size: 21px; width: 21px; height: 21px; opacity: 0.85; flex: none; }
+    mat-icon { font-size: 21px; width: 21px; height: 21px; color: var(--sidebar-muted); flex: none; }
     span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    &:hover { background: rgb(232 209 167 / 9%); }
-    &.active { background: var(--highlight); color: var(--ink-deep); font-weight: 600; mat-icon { opacity: 1; color: var(--primary); } }
+    &:hover { background: var(--sidebar-hover); }
+    &.active { background: var(--sidebar-active-bg); color: var(--sidebar-active-fg); font-weight: 600; mat-icon { color: var(--sidebar-active-fg); } }
   }
   &__badge {
     margin-inline-start: auto; background: var(--danger); color: #fff; font-size: 11px; font-weight: 600;

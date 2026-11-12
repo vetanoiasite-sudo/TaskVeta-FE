@@ -11,12 +11,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { ApiService } from '../../core/api.service';
 import { I18nService, TranslatePipe } from '../../core/i18n.service';
-import { Lookup, SaveTask, TaskTargets, TASK_PRIORITIES, TaskDetails, TaskPriority } from '../../core/models';
+import { LookupService } from '../../core/lookup.service';
+import { Lookup, ProjectLookup, SaveTask, TaskTargets, TASK_PRIORITIES, TaskDetails, TaskPriority } from '../../core/models';
 import { ToastService } from '../../core/toast.service';
 import { validationErrors } from '../../core/http';
 import { combineDateTime, timeOf } from './task-shared';
 
-export interface TaskFormData { task?: TaskDetails; }
+export interface TaskFormData { task?: TaskDetails; /** Pre-selected project for a new task. */ projectId?: number | null; }
 
 function dueAfterStart(group: AbstractControl): ValidationErrors | null {
   const start = group.get('startDate')?.value as Date | null;
@@ -47,6 +48,15 @@ function dueAfterStart(group: AbstractControl): ValidationErrors | null {
             <mat-label>{{ 'tasks.fields.description' | t }}</mat-label>
             <textarea matInput rows="4" formControlName="description" maxlength="4000"></textarea>
             <mat-hint align="end">{{ form.controls.description.value.length }}/4000</mat-hint>
+          </mat-form-field>
+
+          <mat-form-field class="span-2">
+            <mat-label>{{ 'projects.project' | t }} ({{ 'common.optional' | t }})</mat-label>
+            <mat-icon matPrefix>folder_special</mat-icon>
+            <mat-select formControlName="projectId">
+              <mat-option [value]="null">{{ 'projects.noProject' | t }}</mat-option>
+              @for (p of projects(); track p.id) { <mat-option [value]="p.id">{{ label(p) }} <span class="muted">· {{ p.code }}</span></mat-option> }
+            </mat-select>
           </mat-form-field>
 
           <mat-form-field>
@@ -144,6 +154,12 @@ export class TaskFormDialogComponent {
   /** Departments, teams and employees this user may give tasks to (scoped by the server). */
   private readonly targets = toSignal(this.api.taskTargets(), { initialValue: { departments: [], teams: [], employees: [] } as TaskTargets });
   readonly departments = computed(() => this.targets().departments);
+  private readonly allProjects = toSignal(inject(LookupService).projects(), { initialValue: [] as ProjectLookup[] });
+  /** Open projects, plus the task's current project even if it has since been closed. */
+  readonly projects = computed(() => {
+    const current = this.data.task?.task.projectId ?? this.data.projectId ?? null;
+    return this.allProjects().filter(p => (p.status !== 'Completed' && p.status !== 'Cancelled') || p.id === current);
+  });
 
   readonly form = (() => {
     const t = this.data.task;
@@ -153,6 +169,7 @@ export class TaskFormDialogComponent {
       priority: [(t?.task.priority ?? 'Medium') as TaskPriority],
       departmentId: [t?.task.departmentId ?? (null as number | null)],
       teamId: [t?.task.teamId ?? (null as number | null)],
+      projectId: [t ? t.task.projectId : (this.data.projectId ?? (null as number | null))],
       startDate: [t?.task.startDate ? new Date(t.task.startDate) : (null as Date | null)],
       startTime: [t?.task.startDate ? timeOf(t.task.startDate) : '09:00'],
       dueDate: [t?.task.dueDate ? new Date(t.task.dueDate) : (null as Date | null)],
@@ -227,7 +244,7 @@ export class TaskFormDialogComponent {
     const body: SaveTask = {
       title: v.title.trim(), description: v.description.trim() || null, priority: v.priority,
       startDate: combineDateTime(v.startDate, v.startTime), dueDate: combineDateTime(v.dueDate, v.dueTime),
-      departmentId: v.departmentId, teamId: v.teamId, assigneeEmployeeIds: v.assigneeEmployeeIds, rowVersion: this.data.task?.rowVersion ?? null,
+      departmentId: v.departmentId, teamId: v.teamId, projectId: v.projectId, assigneeEmployeeIds: v.assigneeEmployeeIds, rowVersion: this.data.task?.rowVersion ?? null,
     };
     this.saving.set(true);
     this.serverErrors.set({});

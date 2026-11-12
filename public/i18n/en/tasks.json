@@ -39,7 +39,25 @@
       "feedbackOptional": "Feedback (optional)", "deleteTitle": "Delete task"
     },
     "tabs": { "comments": "Comments", "attachments": "Attachments", "history": "History" },
-    "comments": { "empty": "No comments yet. Start the conversation.", "add": "Write a comment", "hint": "Ctrl + Enter to send" },
+    "comments": { "empty": "No comments yet. Start the conversation.", "add": "Write a comment", "hint": "Ctrl + Enter to send",
+      "mention": "Mention someone", "mentionHint": "type @ to mention", "noMatches": "No matching people" },
+    "review": {
+      "approveTitle": "Approve task", "rejectTitle": "Reject task", "rating": "Rating (1–10)",
+      "ratingRequired": "required", "ratingOptional": "optional", "pickRating": "Pick a rating from 1 to 10",
+      "notesOptional": "Notes for the employee (optional)", "notesRequired": "Reason / notes for the employee (required)", "rejectHint": "The employee will see these notes and fix the task.",
+      "history": "Reviews", "reviewer": "Reviewer", "decision": "Decision",
+      "notes": "Notes", "awaiting": "Submitted — waiting for the department head / team leader to approve or reject it.", "awaitingYou": "Submitted for review — please approve it with a rating (1–10) or reject it with notes.",
+      "levels": { "excellent": "Excellent", "good": "Good", "fair": "Fair", "poor": "Needs improvement" }
+    },
+    "reviewReport": {
+      "title": "Task Reviews", "subtitle": "Approvals, rejections and ratings by department heads and team leaders in a period", "reviews": "Reviews",
+      "approved": "Approved", "rejected": "Rejected", "averageRating": "Average rating",
+      "approvalRate": "Approval rate", "byEmployee": "By employee", "allReviews": "All reviews",
+      "approvedOne": "Approved", "rejectedOne": "Rejected", "range": "Lowest – highest",
+      "empty": "No reviews in this period"
+    },
+    "seen": { "seen": "Seen", "notSeen": "Not seen yet", "seenBy": "Seen by:", "seenByAll": "Seen by everyone:", "lastOpened": "Last opened", "noAccount": "No login account" },
+    "roles": { "Assignee": "Assignee", "Creator": "Task creator", "Leader": "Head / team leader" },
     "attachments": {
       "upload": "Upload file", "uploading": "Uploading…", "uploaded": "File uploaded", "download": "Download",
       "rules": "PDF, Office, text, CSV, images or ZIP · max 10 MB", "empty": "No attachments",
@@ -56,5 +74,15 @@
       "created": "Task created and assignees notified", "updated": "Task updated", "progressUpdated": "Progress set to {{value}}%",
       "statusChanged": "Status changed to {{status}}"
     }
+  },
+  "projects": {
+    "title": "Projects", "subtitle": "Company projects, their tasks and timelines", "project": "Project",
+    "noProject": "No project", "add": "Add project", "edit": "Edit project",
+    "empty": "No projects yet", "noDates": "No dates set", "tasks": "tasks",
+    "tasksTotal": "Total tasks", "timeline": "Timeline", "taskList": "Task list",
+    "noTasks": "No tasks in this project yet", "showClosed": "Show completed / cancelled", "projectStart": "Project start",
+    "projectEnd": "Project end", "noDueDate": "no due date", "daysLeft": "{{count}} day(s) left",
+    "daysLate": "{{count}} day(s) past the end date", "endBeforeStart": "The end date must be on or after the start date.", "deleteConfirm": "Delete the project \"{{name}}\"? Its {{count}} task(s) will be kept, without a project.",
+    "scale": { "day": "Days", "week": "Weeks", "month": "Months" }
   }
 }

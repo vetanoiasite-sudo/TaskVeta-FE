@@ -17,9 +17,11 @@ import { I18nService, TranslatePipe } from '../../core/i18n.service';
 import { Perm, TASK_PRIORITIES, TASK_STATUSES, TaskItem, TaskPriority, TaskQuery, TaskStatus } from '../../core/models';
 import { ConfirmService, LoadingBarComponent, PageHeaderComponent, StatusChipComponent, debounce } from '../../shared/ui';
 import { AssigneeStackComponent, statusAction } from './task-shared';
+import { openTaskReview } from './task-review.dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 const COLUMN_TONE: Record<TaskStatus, string> = {
-  New: '#6b5442', Assigned: '#2f5f7d', InProgress: '#743014', PendingReview: '#a8740f', Completed: '#117c57', Rejected: '#c8102e', Cancelled: '#b5a58a',
+  New: '#65676b', Assigned: '#0a7cbd', InProgress: '#1877f2', PendingReview: '#7b4fd6', Completed: '#31a24c', Rejected: '#e41e3f', Cancelled: '#bcc0c4',
 };
 
 @Component({
@@ -124,6 +126,7 @@ export class TaskBoardComponent {
   private readonly auth = inject(AuthService);
   private readonly i18n = inject(I18nService);
   private readonly confirm = inject(ConfirmService);
+  private readonly dialog = inject(MatDialog);
   private readonly router = inject(Router);
 
   /** When embedded, the parent supplies the query and filters are hidden. */
@@ -192,10 +195,10 @@ export class TaskBoardComponent {
     if (event.previousContainer === event.container || task.status === target) return;
     const from = task.status;
 
-    const proceed = (note: string | null) => {
+    const proceed = (note: string | null, rating: number | null = null) => {
       this.move(task.id, target);
       this.setBusy(task.id, true);
-      this.api.changeTaskStatus(task.id, target, note).subscribe({
+      this.api.changeTaskStatus(task.id, target, note, null, rating).subscribe({
         next: details => {
           this.tasks.update(list => list.map(t => (t.id === task.id ? details.task : t)));
           this.setBusy(task.id, false);
@@ -204,6 +207,10 @@ export class TaskBoardComponent {
       });
     };
 
+    if (target === 'Completed' || target === 'Rejected') {
+      openTaskReview(this.dialog, task.title, target === 'Completed').subscribe(r => proceed(r.note, r.rating));
+      return;
+    }
     const action = statusAction(from, target);
     let prompt$: Observable<string | true> = of(true);
     if (action.requiresNote) {

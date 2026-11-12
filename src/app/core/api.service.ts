@@ -7,7 +7,7 @@ import {
   Department, Employee, EmployeePerformance, EmployeeQuery, Holiday, LeaveQuery, LeaveRequest, LeaveType, Lookup,
   MyAttendanceStatus, PagedResult, PageQuery, PublicSettings, QrCode, RegisterUser, ReportQuery, Role, SaveDepartment, SaveHoliday,
   SaveTask, TaskTargets, SaveTeam, SaveWorkSchedule, Settings, TaskComment, TaskAttachment, TaskDashboard, TaskDetails, TaskHistory, TaskItem,
-  TaskQuery, TaskReport, TaskStatus, TeamDetails, Team, TimeZoneItem, UpdateEmployee, UpdateUser, User, WorkSchedule, CurrentUser,
+  TaskQuery, TaskReport, TaskReviewReport, TaskStatus, TeamDetails, Team, TimeZoneItem, Project, ProjectLookup, ProjectTimeline, SaveProject, UpdateEmployee, UpdateUser, User, WorkSchedule, CurrentUser,
 } from './models';
 
 /** Builds HttpParams, dropping null/undefined/empty values. */
@@ -126,6 +126,14 @@ export class ApiService {
   updateHoliday(id: number, body: SaveHoliday) { return this.http.put<Holiday>(`${this.base}/holidays/${id}`, body); }
   deleteHoliday(id: number) { return this.http.delete<void>(`${this.base}/holidays/${id}`); }
 
+  // ---------- projects ----------
+  projects() { return this.http.get<Project[]>(`${this.base}/projects`); }
+  projectLookup() { return this.http.get<ProjectLookup[]>(`${this.base}/projects/lookup`); }
+  projectTimeline(id: number) { return this.http.get<ProjectTimeline>(`${this.base}/projects/${id}/timeline`); }
+  createProject(body: SaveProject) { return this.http.post<Project>(`${this.base}/projects`, body); }
+  updateProject(id: number, body: SaveProject) { return this.http.put<Project>(`${this.base}/projects/${id}`, body); }
+  deleteProject(id: number) { return this.http.delete<void>(`${this.base}/projects/${id}`); }
+
   // ---------- tasks ----------
   tasks(q: TaskQuery) { return this.http.get<PagedResult<TaskItem>>(`${this.base}/tasks`, { params: toParams(q) }); }
   myTasks(q: TaskQuery) { return this.http.get<PagedResult<TaskItem>>(`${this.base}/tasks/my-tasks`, { params: toParams(q) }); }
@@ -135,13 +143,19 @@ export class ApiService {
   createTask(body: SaveTask) { return this.http.post<TaskDetails>(`${this.base}/tasks`, body); }
   updateTask(id: number, body: SaveTask) { return this.http.put<TaskDetails>(`${this.base}/tasks/${id}`, body); }
   deleteTask(id: number) { return this.http.delete<void>(`${this.base}/tasks/${id}`); }
-  changeTaskStatus(id: number, status: TaskStatus, note?: string | null, progressPercent?: number | null) {
-    return this.http.patch<TaskDetails>(`${this.base}/tasks/${id}/status`, { status, note: note ?? null, progressPercent: progressPercent ?? null });
+  /** `rating` (1–10) is required when approving (Completed). */
+  changeTaskStatus(id: number, status: TaskStatus, note?: string | null, progressPercent?: number | null, rating?: number | null) {
+    return this.http.patch<TaskDetails>(`${this.base}/tasks/${id}/status`,
+      { status, note: note ?? null, progressPercent: progressPercent ?? null, rating: rating ?? null });
   }
   updateTaskProgress(id: number, progressPercent: number, note?: string | null) {
     return this.http.patch<TaskDetails>(`${this.base}/tasks/${id}/progress`, { progressPercent, note: note ?? null });
   }
-  addTaskComment(id: number, content: string) { return this.http.post<TaskComment>(`${this.base}/tasks/${id}/comments`, { content }); }
+  addTaskComment(id: number, content: string, mentionedUserIds: number[] = []) {
+    return this.http.post<TaskComment>(`${this.base}/tasks/${id}/comments`, { content, mentionedUserIds });
+  }
+  /** Read receipt: the current user opened the task. */
+  markTaskSeen(id: number) { return this.http.post<void>(`${this.base}/tasks/${id}/seen`, {}); }
   taskHistory(id: number) { return this.http.get<TaskHistory[]>(`${this.base}/tasks/${id}/history`); }
   uploadTaskAttachment(id: number, file: File) {
     const form = new FormData();
@@ -176,6 +190,11 @@ export class ApiService {
   }
   exportReport(kind: 'attendance' | 'absence' | 'tasks' | 'employee-performance', q: ReportQuery, format: ExportFormat) {
     return this.download(`${this.base}/reports/${kind}`, { ...q, format });
+  }
+
+  taskReviewReport(q: ReportQuery) { return this.http.get<TaskReviewReport>(`${this.base}/reports/task-reviews`, { params: toParams(q) }); }
+  exportTaskReviews(q: ReportQuery, format: ExportFormat, view: 'summary' | 'items') {
+    return this.download(`${this.base}/reports/task-reviews`, { ...q, format, view });
   }
 
   // ---------- audit ----------

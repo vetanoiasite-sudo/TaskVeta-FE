@@ -30,6 +30,11 @@ import { TaskBoardComponent } from './task-board';
 import { TaskFormDialogComponent } from './task-form.dialog';
 import { AssigneeStackComponent } from './task-shared';
 
+function numberParam(v: string | null): number | null {
+  const n = Number(v);
+  return v && Number.isInteger(n) ? n : null;
+}
+
 type StatFilter = 'all' | 'new' | 'inProgress' | 'pendingReview' | 'completed' | 'overdue';
 
 @Component({
@@ -60,6 +65,8 @@ export class TaskListComponent {
 
   readonly employees = toSignal(this.lookups.employees(), { initialValue: [] });
   readonly departments = toSignal(this.lookups.departments(), { initialValue: [] });
+  readonly projects = toSignal(this.lookups.projects(), { initialValue: [] });
+  readonly lang = this.i18n.lang;
 
   // view state
   readonly view = signal<'table' | 'board'>((localStorage.getItem('cm.tasks.view') as 'table' | 'board') || 'table');
@@ -75,7 +82,8 @@ export class TaskListComponent {
   readonly status = signal<TaskStatus | null>(null);
   readonly priority = signal<TaskPriority | null>(null);
   readonly assigneeId = signal<number | null>(null);
-  readonly departmentId = signal<number | null>(null);
+  readonly departmentId = signal<number | null>(numberParam(inject(ActivatedRoute).snapshot.queryParamMap.get('departmentId')));
+  readonly projectId = signal<number | null>(numberParam(inject(ActivatedRoute).snapshot.queryParamMap.get('projectId')));
   readonly overdue = signal(false);
   readonly createdByMe = signal(false);
   readonly dueFrom = signal<Date | null>(null);
@@ -88,7 +96,7 @@ export class TaskListComponent {
     const to = this.dueTo();
     return {
       search: this.search() || undefined, status: this.status(), priority: this.priority(),
-      assigneeId: this.isMy ? null : this.assigneeId(), departmentId: this.isMy ? null : this.departmentId(),
+      assigneeId: this.isMy ? null : this.assigneeId(), departmentId: this.isMy ? null : this.departmentId(), projectId: this.projectId(),
       overdue: this.overdue() || null, createdByMe: (!this.isMy && this.createdByMe()) || undefined,
       dueFrom: this.dueFrom()?.toISOString() ?? null,
       dueTo: to ? new Date(to.getFullYear(), to.getMonth(), to.getDate(), 23, 59, 59).toISOString() : null,
@@ -98,7 +106,7 @@ export class TaskListComponent {
 
   readonly hasFilters = computed(() => {
     const q = this.query();
-    return !!(q.search || q.status || q.priority || q.assigneeId || q.departmentId || q.overdue || q.createdByMe || q.dueFrom || q.dueTo);
+    return !!(q.search || q.status || q.priority || q.assigneeId || q.departmentId || q.projectId || q.overdue || q.createdByMe || q.dueFrom || q.dueTo);
   });
 
   readonly onSearch = debounce((v: string) => { this.search.set(v); this.reload(); });
@@ -151,7 +159,7 @@ export class TaskListComponent {
   }
 
   resetFilters(): void {
-    this.search.set(''); this.status.set(null); this.priority.set(null); this.assigneeId.set(null); this.departmentId.set(null);
+    this.search.set(''); this.status.set(null); this.priority.set(null); this.assigneeId.set(null); this.departmentId.set(null); this.projectId.set(null);
     this.overdue.set(false); this.createdByMe.set(false); this.dueFrom.set(null); this.dueTo.set(null); this.activeStat.set('all');
     this.reload();
   }

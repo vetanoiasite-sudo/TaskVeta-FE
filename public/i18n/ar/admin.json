@@ -40,7 +40,7 @@
       "employees_manage": "إدارة الموظفين", "attendance_self": "الحضور الشخصي", "attendance_view_team": "حضور الفريق",
       "attendance_view_all": "حضور الجميع", "attendance_correct": "تصحيح الحضور", "attendance_kiosk": "شاشة رمز QR",
       "leave_approve": "اعتماد الإجازات", "holidays_manage": "إدارة العطل", "tasks_assign": "إسناد المهام", "tasks_review": "مراجعة المهام",
-      "tasks_view_all": "عرض كل المهام", "reports_view": "عرض التقارير", "reports_export": "تصدير التقارير", "audit_view": "عرض سجل التدقيق"
+      "tasks_view_all": "عرض كل المهام", "projects_manage": "إدارة المشاريع", "tasks_reviews_view": "تقرير تقييم المهام", "reports_view": "عرض التقارير", "reports_export": "تصدير التقارير", "audit_view": "عرض سجل التدقيق"
     },
     "settings": {
       "title": "إعدادات النظام", "subtitle": "إعدادات الشركة وقواعد الحضور والتحقق من التواجد في المقر", "lastUpdated": "آخر تحديث",

@@ -49,8 +49,8 @@ import { QrCode } from '../../core/models';
     </div>
   `,
   styles: `
-    .kiosk { min-height: 100vh; display: flex; flex-direction: column; color: #f0dfbf;
-      background: radial-gradient(circle at 30% 10%, #5a3a22 0, #2e1e12 65%); }
+    .kiosk { min-height: 100vh; display: flex; flex-direction: column; color: var(--hero-fg);
+      background: var(--hero-bg); }
     header { display: flex; justify-content: space-between; align-items: center; padding: 18px 28px;
       button, a { color: var(--highlight); } }
     .brand { display: flex; align-items: center; gap: 10px; font-size: 20px; mat-icon { color: var(--highlight); } }

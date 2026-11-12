@@ -51,6 +51,8 @@ const NAV: NavGroup[] = [
       { label: 'nav.myTasks', icon: 'assignment_ind', link: '/tasks/my' },
       { label: 'nav.taskManagement', icon: 'assignment', link: '/tasks', exact: true, permissions: [Perm.TasksAssign] },
       { label: 'nav.kanban', icon: 'view_kanban', link: '/tasks/board' },
+      { label: 'nav.projects', icon: 'folder_special', link: '/projects' },
+      { label: 'nav.taskReviews', icon: 'grade', link: '/tasks/reviews', permissions: [Perm.TaskReviewsView] },
     ],
   },
   {

@@ -75,6 +75,8 @@ const TONES: Record<string, Tone> = {
   NotCheckedIn: 'warning', PendingLeave: 'info',
   // task status
   New: 'neutral', Assigned: 'info', InProgress: 'primary', PendingReview: 'purple', Completed: 'success', Rejected: 'danger', Cancelled: 'neutral',
+  // project status
+  Planned: 'info', Active: 'primary', OnHold: 'warning',
   // priority
   Low: 'neutral', Medium: 'info', High: 'warning', Urgent: 'danger',
   // leave
@@ -208,8 +210,8 @@ export class AvatarComponent {
   readonly color = computed(() => {
     let h = 0;
     for (const c of this.name() ?? '') h = (h * 31 + c.charCodeAt(0)) % 360;
-    // Warm earthy tones (browns, ochres) that sit with the brand palette.
-    return `hsl(${10 + (h % 45)} ${35 + (h % 4) * 8}% ${30 + (h % 3) * 7}%)`;
+    // Varied, medium-saturation colours (Facebook-style initials avatars) that keep white text readable.
+    return `hsl(${h} ${45 + (h % 3) * 8}% ${38 + (h % 4) * 3}%)`;
   });
 }
 

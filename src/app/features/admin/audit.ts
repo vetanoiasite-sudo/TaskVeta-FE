@@ -48,7 +48,7 @@ function pretty(json: string | null): string {
     .meta { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin: 0 0 16px; dt { color: var(--text-muted); } dd { margin: 0; } }
     .diff { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; h4 { margin: 0 0 6px; }
       @media (max-width: 700px) { grid-template-columns: 1fr; } }
-    pre { direction: ltr; text-align: left; background: var(--ink-deep); color: #f0dfbf; padding: 12px; border-radius: 10px; font-size: 12px;
+    pre { direction: ltr; text-align: left; background: var(--ink-deep); color: #e4e6eb; padding: 12px; border-radius: 10px; font-size: 12px;
       overflow: auto; max-height: 360px; margin: 0; white-space: pre-wrap; word-break: break-word; }
   `,
 })

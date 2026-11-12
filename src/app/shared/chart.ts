@@ -6,7 +6,7 @@ Chart.register(...registerables);
 
 // ---------------------------------------------------------------- chart (Chart.js wrapper)
 
-const PALETTE = ['#743014', '#117c57', '#a8740f', '#c8102e', '#84592b', '#2f5f7d', '#9d9167', '#6b5442'];
+const PALETTE = ['#1877f2', '#31a24c', '#f7b928', '#e41e3f', '#7b4fd6', '#0a7cbd', '#f3425f', '#65676b'];
 
 @Component({
   selector: 'app-chart',

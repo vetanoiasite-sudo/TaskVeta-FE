@@ -5,7 +5,7 @@
     "overview": "نظرة عامة", "dashboard": "لوحة التحكم", "notifications": "الإشعارات",
     "attendance": "الحضور", "myAttendance": "حضوري", "leave": "طلبات الإجازة", "dailyAttendance": "الحضور اليومي",
     "attendanceHistory": "سجل الحضور", "absences": "تقارير الغياب", "analytics": "تحليلات الحضور", "kiosk": "شاشة رمز QR",
-    "tasks": "المهام", "myTasks": "مهامي", "taskManagement": "إدارة المهام", "kanban": "لوحة كانبان",
+    "tasks": "المهام", "myTasks": "مهامي", "taskManagement": "إدارة المهام", "kanban": "لوحة كانبان", "projects": "المشاريع", "taskReviews": "تقييم المهام",
     "administration": "الإدارة", "employees": "الموظفون", "departments": "الأقسام", "teams": "الفرق",
     "users": "المستخدمون والأدوار", "settings": "إعدادات النظام", "audit": "سجل التدقيق"
   },
@@ -62,6 +62,7 @@
       "Upcoming": "قادم", "NotArrived": "لم يصل", "NotCheckedIn": "لم يسجّل الحضور", "PendingLeave": "إجازة قيد الطلب",
       "New": "جديدة", "Assigned": "مُسندة", "InProgress": "قيد التنفيذ", "PendingReview": "بانتظار المراجعة", "Completed": "مكتملة",
       "Rejected": "مرفوضة", "Cancelled": "ملغاة",
+      "Planned": "مخطط", "Active": "نشط", "OnHold": "متوقف مؤقتاً",
       "Low": "منخفضة", "Medium": "متوسطة", "High": "عالية", "Urgent": "عاجلة",
       "Pending": "قيد الانتظار", "Approved": "موافق عليها",
       "true": "نشط", "false": "غير نشط"
@@ -72,7 +73,7 @@
     "notificationType": {
       "TaskAssigned": "مهمة جديدة", "TaskDeadlineApproaching": "اقتراب الموعد", "TaskOverdue": "مهمة متأخرة",
       "TaskApproved": "موافقة على مهمة", "TaskRejected": "رفض مهمة", "TaskComment": "تعليق", "TaskStatusChanged": "تغيّر الحالة",
-      "AttendanceUpdated": "تعديل الحضور", "AttendanceAttention": "تنبيه حضور", "LeaveRequest": "طلب إجازة", "System": "النظام"
+      "AttendanceUpdated": "تعديل الحضور", "AttendanceAttention": "تنبيه حضور", "LeaveRequest": "طلب إجازة", "System": "النظام", "TaskMention": "إشارة"
     },
     "verification": { "None": "بدون", "Geofence": "الموقع الجغرافي", "Network": "شبكة الشركة", "QrCode": "رمز QR" },
     "source": { "Web": "الويب", "QrCode": "رمز QR", "Manual": "يدوي (الموارد البشرية)", "System": "النظام" }

@@ -116,15 +116,15 @@ export class DashboardComponent {
   readonly trendSets = computed(() => {
     const t = this.data()?.trend ?? [];
     return [
-      { label: this.i18n.t('dashboard.present'), data: t.map(p => p.present), color: '#117c57', fill: true },
-      { label: this.i18n.t('dashboard.late'), data: t.map(p => p.late), color: '#a8740f' },
-      { label: this.i18n.t('dashboard.absent'), data: t.map(p => p.absent), color: '#c8102e' },
+      { label: this.i18n.t('dashboard.present'), data: t.map(p => p.present), color: '#31a24c', fill: true },
+      { label: this.i18n.t('dashboard.late'), data: t.map(p => p.late), color: '#f7b928' },
+      { label: this.i18n.t('dashboard.absent'), data: t.map(p => p.absent), color: '#e41e3f' },
     ];
   });
   readonly priorityLabels = computed(() => ['Low', 'Medium', 'High', 'Urgent'].map(p => this.i18n.enum('enums.status', p)));
   readonly prioritySets = computed(() => {
     const p = this.data()?.tasks.byPriority;
-    return [{ label: this.i18n.t('common.total'), data: p ? [p.Low, p.Medium, p.High, p.Urgent] : [], color: '#84592b' }];
+    return [{ label: this.i18n.t('common.total'), data: p ? [p.Low, p.Medium, p.High, p.Urgent] : [], color: '#1877f2' }];
   });
 
   constructor() {

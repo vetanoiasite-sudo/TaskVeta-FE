@@ -39,7 +39,7 @@
       "employees_manage": "Manage employees", "attendance_self": "Own attendance", "attendance_view_team": "Team attendance",
       "attendance_view_all": "All attendance", "attendance_correct": "Correct attendance", "attendance_kiosk": "QR kiosk display",
       "leave_approve": "Approve leave", "holidays_manage": "Manage holidays", "tasks_assign": "Assign tasks", "tasks_review": "Review tasks",
-      "tasks_view_all": "View all tasks", "reports_view": "View reports", "reports_export": "Export reports", "audit_view": "View audit log"
+      "tasks_view_all": "View all tasks", "projects_manage": "Manage projects", "tasks_reviews_view": "Task review report", "reports_view": "View reports", "reports_export": "Export reports", "audit_view": "View audit log"
     },
     "settings": {
       "title": "System Settings", "subtitle": "Company configuration, attendance rules and on-site verification", "lastUpdated": "Last updated",

@@ -48,7 +48,8 @@ export function statusAction(from: TaskStatus, to: TaskStatus): StatusAction {
     </span>
   `,
   styles: `
-    .stack { display: inline-flex; align-items: center; }
+    /* flex-direction/gap reset: the global .stack utility (styles.scss) is a vertical column */
+    .stack { display: inline-flex; flex-direction: row; gap: 0; align-items: center; }
     .stack > * { margin-inline-start: -8px; border: 2px solid var(--surface); border-radius: 50%; }
     .stack > *:first-child { margin-inline-start: 0; }
     .more { display: inline-grid; place-items: center; background: var(--neutral-soft); color: var(--text-muted); font-size: 11px; font-weight: 600; padding: 0 4px; box-sizing: border-box; }

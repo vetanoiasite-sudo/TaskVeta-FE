@@ -16,7 +16,7 @@ import { EmptyStateComponent, LoadingBarComponent, PageHeaderComponent } from '.
 
 const ICONS: Record<string, string> = {
   TaskAssigned: 'assignment_add', TaskDeadlineApproaching: 'alarm', TaskOverdue: 'running_with_errors', TaskApproved: 'task_alt',
-  TaskRejected: 'assignment_return', TaskComment: 'chat', TaskStatusChanged: 'sync_alt', AttendanceUpdated: 'edit_calendar',
+  TaskRejected: 'assignment_return', TaskComment: 'chat', TaskMention: 'alternate_email', TaskStatusChanged: 'sync_alt', AttendanceUpdated: 'edit_calendar',
   AttendanceAttention: 'warning', LeaveRequest: 'beach_access', System: 'info',
 };
 

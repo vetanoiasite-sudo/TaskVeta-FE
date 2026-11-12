@@ -5,7 +5,7 @@
     "overview": "Overview", "dashboard": "Dashboard", "notifications": "Notifications",
     "attendance": "Attendance", "myAttendance": "My Attendance", "leave": "Leave Requests", "dailyAttendance": "Daily Attendance",
     "attendanceHistory": "Attendance History", "absences": "Absence Reports", "analytics": "Attendance Analytics", "kiosk": "QR Kiosk",
-    "tasks": "Tasks", "myTasks": "My Tasks", "taskManagement": "Task Management", "kanban": "Kanban Board",
+    "tasks": "Tasks", "myTasks": "My Tasks", "taskManagement": "Task Management", "kanban": "Kanban Board", "projects": "Projects", "taskReviews": "Task Reviews",
     "administration": "Administration", "employees": "Employees", "departments": "Departments", "teams": "Teams",
     "users": "Users & Roles", "settings": "System Settings", "audit": "Audit Log"
   },
@@ -62,6 +62,7 @@
       "Upcoming": "Upcoming", "NotArrived": "Not arrived", "NotCheckedIn": "Not checked in", "PendingLeave": "Pending leave",
       "New": "New", "Assigned": "Assigned", "InProgress": "In progress", "PendingReview": "Pending review", "Completed": "Completed",
       "Rejected": "Rejected", "Cancelled": "Cancelled",
+      "Planned": "Planned", "Active": "Active", "OnHold": "On hold",
       "Low": "Low", "Medium": "Medium", "High": "High", "Urgent": "Urgent",
       "Pending": "Pending", "Approved": "Approved",
       "true": "Active", "false": "Inactive"
@@ -72,7 +73,7 @@
     "notificationType": {
       "TaskAssigned": "Task assigned", "TaskDeadlineApproaching": "Deadline approaching", "TaskOverdue": "Task overdue",
       "TaskApproved": "Task approved", "TaskRejected": "Task rejected", "TaskComment": "Comment", "TaskStatusChanged": "Status changed",
-      "AttendanceUpdated": "Attendance updated", "AttendanceAttention": "Attendance attention", "LeaveRequest": "Leave request", "System": "System"
+      "AttendanceUpdated": "Attendance updated", "AttendanceAttention": "Attendance attention", "LeaveRequest": "Leave request", "System": "System", "TaskMention": "Mention"
     },
     "verification": { "None": "None", "Geofence": "GPS", "Network": "Company network", "QrCode": "QR code" },
     "source": { "Web": "Web", "QrCode": "QR code", "Manual": "Manual (HR)", "System": "System" }

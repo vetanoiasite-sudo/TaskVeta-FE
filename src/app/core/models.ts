@@ -50,6 +50,8 @@ export const Perm = {
   TasksAssign: 'tasks.assign',
   TasksReview: 'tasks.review',
   TasksViewAll: 'tasks.view.all',
+  ProjectsManage: 'projects.manage',
+  TaskReviewsView: 'tasks.reviews.view',
   ReportsView: 'reports.view',
   ReportsExport: 'reports.export',
   AuditView: 'audit.view',
@@ -207,24 +209,30 @@ export interface TaskAssignee { employeeId: number; employeeCode: string; fullNa
 export interface TaskItem {
   id: number; title: string; priority: TaskPriority; status: TaskStatus; progressPercent: number; startDate: string | null;
   dueDate: string | null; completionDate: string | null; isOverdue: boolean; assignedByUserId: number; assignedByName: string;
-  departmentId: number | null; departmentName: string | null; teamId: number | null; teamName: string | null; assignees: TaskAssignee[]; commentCount: number; attachmentCount: number;
-  createdAt: string; updatedAt: string;
+  departmentId: number | null; departmentName: string | null; teamId: number | null; teamName: string | null; projectId: number | null; projectName: string | null; assignees: TaskAssignee[]; commentCount: number; attachmentCount: number;
+  createdAt: string; updatedAt: string; rating: number | null;
 }
-export interface TaskComment { id: number; userId: number; userName: string; content: string; createdAt: string; }
+export interface TaskComment { id: number; userId: number; userName: string; content: string; createdAt: string; mentionedUserIds: number[]; }
+/** Someone involved in a task (can be @mentioned), with read receipts. */
+export interface TaskParticipant {
+  userId: number; name: string; employeeId: number | null; role: 'Assignee' | 'Creator' | 'Leader'; firstSeenAt: string | null; lastSeenAt: string | null;
+}
 export interface TaskAttachment { id: number; fileName: string; contentType: string; sizeBytes: number; uploadedByUserId: number; uploadedByName: string; createdAt: string; }
 export interface TaskHistory { id: number; action: string; fromStatus: TaskStatus | null; toStatus: TaskStatus | null; details: string | null; changedBy: string | null; createdAt: string; }
 export interface TaskPermissions { canEdit: boolean; canReview: boolean; canUpdateProgress: boolean; canComment: boolean; allowedStatuses: TaskStatus[]; }
 export interface TaskDetails {
   task: TaskItem; description: string | null; reviewNotes: string | null; comments: TaskComment[]; attachments: TaskAttachment[];
-  permissions: TaskPermissions; rowVersion: string;
+  permissions: TaskPermissions; rowVersion: string; participants: TaskParticipant[]; reviews: TaskReview[];
 }
+/** A department head / team leader decision on a submitted task. */
+export interface TaskReview { id: number; approved: boolean; rating: number | null; notes: string | null; reviewerUserId: number; reviewerName: string; createdAt: string; }
 export interface TaskQuery extends PageQuery {
   status?: TaskStatus | null; priority?: TaskPriority | null; assigneeId?: number | null; departmentId?: number | null; teamId?: number | null;
-  overdue?: boolean | null; dueFrom?: string | null; dueTo?: string | null; mine?: boolean; createdByMe?: boolean;
+  projectId?: number | null; overdue?: boolean | null; dueFrom?: string | null; dueTo?: string | null; mine?: boolean; createdByMe?: boolean;
 }
 export interface SaveTask {
   title: string; description: string | null; priority: TaskPriority; startDate: string | null; dueDate: string | null;
-  departmentId: number | null; teamId: number | null; assigneeEmployeeIds: number[]; rowVersion?: string | null;
+  departmentId: number | null; teamId: number | null; projectId: number | null; assigneeEmployeeIds: number[]; rowVersion?: string | null;
 }
 /** What the current user may pick in the task form (scoped by the server). */
 export interface TaskTargets {
@@ -236,6 +244,23 @@ export interface TaskDashboard {
   total: number; new: number; assigned: number; inProgress: number; pendingReview: number; completed: number; rejected: number;
   cancelled: number; overdue: number; dueThisWeek: number; byPriority: Record<TaskPriority, number>;
 }
+
+// ---------------- Projects ----------------
+export type ProjectStatus = 'Planned' | 'Active' | 'OnHold' | 'Completed' | 'Cancelled';
+export const PROJECT_STATUSES: ProjectStatus[] = ['Planned', 'Active', 'OnHold', 'Completed', 'Cancelled'];
+/** Task counts cover all tasks of the project. */
+export interface Project {
+  id: number; name: string; nameAr: string | null; code: string; description: string | null; status: ProjectStatus;
+  startDate: string | null; endDate: string | null; taskCount: number; completedTaskCount: number; overdueTaskCount: number;
+  progressPercent: number; createdAt: string; updatedAt: string;
+}
+export interface ProjectLookup { id: number; name: string; nameAr: string | null; code: string; status: ProjectStatus; }
+export interface SaveProject {
+  name: string; nameAr: string | null; code: string; description: string | null; status: ProjectStatus;
+  startDate: string | null; endDate: string | null;
+}
+/** All tasks of the project; `openableTaskIds` = the ones the current user may open. */
+export interface ProjectTimeline { project: Project; tasks: TaskItem[]; openableTaskIds: number[]; }
 
 // ---------------- Notifications ----------------
 export interface AppNotification {
@@ -274,6 +299,18 @@ export interface EmployeePerformance {
   employeeId: number; employeeCode: string; employeeName: string; departmentName: string; attendanceRate: number; punctualityRate: number;
   totalHours: number; absentDays: number; lateDays: number; tasksAssigned: number; tasksCompleted: number; tasksCompletedOnTime: number;
   tasksOverdue: number; taskCompletionRate: number; onTimeRate: number; score: number;
+}
+export interface TaskReviewRow {
+  reviewId: number; taskId: number; taskTitle: string; projectName: string | null; departmentName: string | null; assignees: string;
+  reviewerName: string; approved: boolean; rating: number | null; notes: string | null; reviewedAt: string;
+}
+export interface EmployeeReviewStats {
+  employeeId: number; employeeCode: string; employeeName: string; departmentName: string; reviews: number; approved: number; rejected: number;
+  averageRating: number | null; minRating: number | null; maxRating: number | null; approvalRate: number;
+}
+export interface TaskReviewReport {
+  from: string; to: string; reviews: number; approved: number; rejected: number; averageRating: number | null;
+  byEmployee: EmployeeReviewStats[]; items: TaskReviewRow[];
 }
 export interface Dashboard { attendance: DailySummary | null; tasks: TaskDashboard; trend: TrendPoint[]; me: MyAttendanceStatus | null; }
 

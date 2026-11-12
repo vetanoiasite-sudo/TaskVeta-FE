@@ -11,13 +11,13 @@ html {
     typography: (plain-family: var(--font), brand-family: var(--font)),
     density: -1,
   ));
-  // Pin the key roles to the exact brand colors (palette tone 40 is slightly lighter than the brand primary).
+  // Pin the key roles to the exact brand colors (palette tone 40 is darker than Facebook blue).
   @include mat.theme-overrides((
-    primary: #743014, on-primary: #ffffff, primary-container: #f6e8df, on-primary-container: #442d1c,
-    surface: #ffffff, on-surface: #442d1c, on-surface-variant: #6b5442, background: #faf4e8,
-    outline: #cfbd9a, outline-variant: #e8dcc4,
-    surface-container-lowest: #ffffff, surface-container-low: #fdf9f2, surface-container: #faf4e8,
-    surface-container-high: #f6eddc, surface-container-highest: #f2e6ce,
+    primary: #1877f2, on-primary: #ffffff, primary-container: #e7f3ff, on-primary-container: #0b3d91,
+    surface: #ffffff, on-surface: #050505, on-surface-variant: #65676b, background: #f0f2f5,
+    outline: #ced0d4, outline-variant: #e4e6eb,
+    surface-container-lowest: #ffffff, surface-container-low: #f7f8fa, surface-container: #f0f2f5,
+    surface-container-high: #e9ebee, surface-container-highest: #e4e6eb,
   ));
   @include mat.button-overrides((filled-container-shape: 10px, outlined-container-shape: 10px, text-container-shape: 10px));
   @include mat.card-overrides((elevated-container-shape: 14px, outlined-container-shape: 14px));
@@ -25,42 +25,51 @@ html {
 }
 
 // ------------------------------------------------------------------ design tokens
-// Brand palette taken from the Vetanoia store (brown theme): https://vastore.vetanoia.com/
+// Facebook-style palette: blue primary, light grey page, white cards and sidebar, dark grey text.
 :root {
   --font: 'Cairo Variable', 'Cairo', 'Segoe UI', Tahoma, system-ui, sans-serif;
-  --app-bg: #faf4e8;
+  --app-bg: #f0f2f5;
   --surface: #ffffff;
-  --surface-2: #f7efdf;
-  --surface-hover: #fbf6ec;
-  --border: #e8dcc4;
-  --border-strong: #cfbd9a;
-  --text: #442d1c;
-  --text-muted: #6b5442;
-  --ink-deep: #2e1e12;
-  --sidebar-bg: #2e1e12;
-  --sidebar-fg: #e8d1a7;
-  --highlight: #e8d1a7;
-  --highlight-hover: #f0dfbf;
-  --primary: #743014;
-  --primary-hover: #442d1c;
-  --primary-soft: #f6e8df;
-  --accent: #84592b;
-  --accent-soft: #f3e7d6;
-  --olive: #9d9167;
-  --success: #117c57;
-  --success-soft: #e1f1e9;
-  --warning: #a8740f;
-  --warning-soft: #f7ecd2;
-  --danger: #c8102e;
-  --danger-soft: #f9e0e4;
-  --info: #2f5f7d;
-  --info-soft: #e2ecf2;
-  --purple: #84592b;
-  --neutral: #6b5442;
-  --neutral-soft: #f2e6ce;
-  --radius: 14px;
-  --shadow: 0 1px 4px rgb(68 45 28 / 10%);
-  --shadow-lg: 0 14px 34px rgb(68 45 28 / 16%);
+  --surface-2: #f0f2f5;
+  --surface-hover: #f2f2f2;
+  --border: #e4e6eb;
+  --border-strong: #ced0d4;
+  --text: #050505;
+  --text-muted: #65676b;
+  --ink-deep: #1c1e21;
+  // sidebar (white, like Facebook's left column)
+  --sidebar-bg: #ffffff;
+  --sidebar-fg: #050505;
+  --sidebar-muted: #65676b;
+  --sidebar-hover: #f2f2f2;
+  --sidebar-active-bg: #e7f3ff;
+  --sidebar-active-fg: #1877f2;
+  --sidebar-sep: #e4e6eb;
+  // hero areas (login, kiosk): blue background with white text
+  --hero-bg: linear-gradient(135deg, #1877f2 0%, #0b5fcc 100%);
+  --hero-fg: #ffffff;
+  --highlight: #ffffff;
+  --highlight-hover: #e7f3ff;
+  --primary: #1877f2;
+  --primary-hover: #166fe5;
+  --primary-soft: #e7f3ff;
+  --accent: #7b4fd6;
+  --accent-soft: #efe7fd;
+  --olive: #8a8d91;
+  --success: #31a24c;
+  --success-soft: #e6f4ea;
+  --warning: #c27c0e;
+  --warning-soft: #fff4d6;
+  --danger: #e41e3f;
+  --danger-soft: #fde7ea;
+  --info: #0a7cbd;
+  --info-soft: #e3f2fb;
+  --purple: #7b4fd6;
+  --neutral: #65676b;
+  --neutral-soft: #e4e6eb;
+  --radius: 12px;
+  --shadow: 0 1px 2px rgb(0 0 0 / 10%);
+  --shadow-lg: 0 12px 28px rgb(0 0 0 / 20%), 0 2px 4px rgb(0 0 0 / 10%);
 }
 
 html, body { height: 100%; }
@@ -161,13 +170,14 @@ table.mat-mdc-table {
 .loading-bar, .loading-bar-placeholder { height: 4px; }
 
 .alert { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 10px; margin-bottom: 12px; font-size: 14px;
-  &-danger { background: var(--danger-soft); color: #8e0b21; } &-warning { background: var(--warning-soft); color: #74500a; }
-  &-info { background: var(--info-soft); color: #22465c; } &-success { background: var(--success-soft); color: #0c5a3f; } }
+  &-danger { background: var(--danger-soft); color: #a3112b; } &-warning { background: var(--warning-soft); color: #7a4d06; }
+  &-info { background: var(--info-soft); color: #0b4f7a; } &-success { background: var(--success-soft); color: #1d6b31; } }
 
 .avatar { display: inline-grid; place-items: center; border-radius: 50%; color: #fff; font-weight: 600; flex: none; }
 
 .btn-danger.mat-mdc-unelevated-button:not(:disabled) { background: var(--danger); color: #fff; }
 .confirm-message { white-space: pre-line; }
+.tooltip-multiline .mdc-tooltip__surface { white-space: pre-line; text-align: start; }
 
 .chart-box { position: relative; width: 100%; }
 
